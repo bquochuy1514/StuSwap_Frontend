@@ -2,7 +2,7 @@ import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
 	images: {
-		domains: ['localhost'], // Add 'localhost' to the allowed domains
+		domains: ['localhost', 'lh3.googleusercontent.com'], // Add 'localhost' to the allowed domains
 	},
 };
 

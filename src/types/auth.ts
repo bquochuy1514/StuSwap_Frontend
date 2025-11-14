@@ -84,19 +84,26 @@ export type ApiError = {
 	error?: string;
 };
 
+export type AddressData = {
+	specificAddress: string | null;
+	ward: string | null;
+	district: string | null;
+	province: string | null;
+};
+
 export type User = {
-	id: number;
-	fullName: string;
+	id: string;
 	email: string;
-	role: string;
-	phone: string;
+	fullName: string;
+	phone: string | null;
 	avatar: string;
-	bio: string;
-	university: string;
+	address: AddressData;
+	role: string;
+	bio: string | null;
+	university: string | null;
 	isActive: boolean;
-	createdAt: Date;
-	updatedAt: Date;
-	address: object;
+	createdAt: string;
+	updatedAt: string;
 };
 
 // -------------------- Verify account & Resend code types --------------------

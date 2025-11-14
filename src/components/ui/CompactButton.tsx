@@ -23,9 +23,9 @@ export default function CompactButton({
 	...props
 }: CompactButtonProps) {
 	const sizeClasses = {
-		sm: 'px-4 py-1.5 text-xs min-w-[70px]',
-		md: 'px-5 py-2.5 text-sm min-w-[120px]',
-		lg: 'px-6 py-3 text-base min-w-[140px]',
+		sm: 'px-3 py-2 text-xs min-w-[70px]',
+		md: 'px-4 py-2 text-sm min-w-[120px]',
+		lg: 'px-6 py-2.5 text-base min-w-[140px]',
 	};
 
 	// Icon size theo button size
@@ -37,10 +37,11 @@ export default function CompactButton({
 
 	const variants = {
 		primary: `
-			bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-600
+			bg-gradient-to-r from-emerald-500 to-teal-600
 			text-white 
 			shadow-md shadow-emerald-500/20
-			hover:from-emerald-600 hover:via-emerald-700 hover:to-teal-700
+			hover:from-emerald-600 hover:to-teal-700
+			hover:shadow-lg hover:shadow-emerald-500/30
 		`,
 		secondary: `
 			bg-white
@@ -48,20 +49,24 @@ export default function CompactButton({
 			border-2 border-emerald-300
 			shadow-md shadow-emerald-500/10
 			hover:bg-emerald-50 hover:border-emerald-400
+			hover:shadow-lg hover:shadow-emerald-500/20
 		`,
 		outline: `
-			bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-600
-			text-white
-			border-2 border-white
-			shadow-md shadow-emerald-500/20
-			hover:from-emerald-600 hover:via-emerald-700 hover:to-teal-700
-			hover:border-white/90
+			bg-transparent
+			text-gray-300
+			border-2 border-gray-600
+			shadow-sm
+			hover:border-emerald-500 hover:text-emerald-400
+			hover:bg-gray-800/50
+			hover:shadow-md hover:shadow-emerald-500/20
 		`,
 		ghost: `
-			bg-gradient-to-br from-orange-500 via-orange-600 to-red-600
+			bg-gradient-to-r from-gray-700 to-gray-800
 			text-white
-			shadow-md shadow-orange-500/20
-			hover:from-orange-600 hover:via-orange-700 hover:to-red-700
+			shadow-md shadow-gray-900/30
+			hover:from-gray-600 hover:to-gray-700
+			hover:shadow-lg hover:shadow-gray-900/40
+			border border-gray-600
 		`,
 	};
 
@@ -69,23 +74,19 @@ export default function CompactButton({
 		<button
 			disabled={disabled}
 			className={cn(
-				`font-semibold rounded-xl cursor-pointer
-				transition-all duration-200 ease-out
-				hover:scale-[1.03] hover:shadow-lg
+				`font-medium rounded-lg cursor-pointer
+				transition-all duration-300 ease-out
+				hover:scale-[1.02]
 				active:scale-[0.98]
-				focus:outline-none
+				focus:outline-none focus:ring-2 focus:ring-offset-2
 				disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:hover:shadow-none`,
 				icon ? 'flex items-center justify-center gap-2' : '',
 				sizeClasses[size],
 				variants[variant],
-				variant === 'primary' &&
-					'hover:shadow-emerald-500/30 focus:ring-emerald-400/50',
-				variant === 'secondary' &&
-					'hover:shadow-emerald-500/20 focus:ring-emerald-400/50',
-				variant === 'outline' &&
-					'hover:shadow-emerald-500/30 focus:ring-emerald-400/50',
-				variant === 'ghost' &&
-					'hover:shadow-orange-500/30 focus:ring-orange-400/50',
+				variant === 'primary' && 'focus:ring-emerald-400/50',
+				variant === 'secondary' && 'focus:ring-emerald-400/50',
+				variant === 'outline' && 'focus:ring-emerald-400/50',
+				variant === 'ghost' && 'focus:ring-gray-500/50',
 				fullWidth && 'w-full',
 				className
 			)}
@@ -99,7 +100,7 @@ export default function CompactButton({
 			)}
 
 			{/* Text */}
-			<span>{children}</span>
+			<span className="whitespace-nowrap">{children}</span>
 		</button>
 	);
 }

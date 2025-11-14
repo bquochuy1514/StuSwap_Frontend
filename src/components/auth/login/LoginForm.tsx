@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 // import LoadingIcon from '../../shared/LoadingIcon';
 import { useAuth } from '@/contexts/AuthContext';
 import Link from 'next/link';
-import { ApiError, LoginError } from '@/types/auth';
+import { LoginError } from '@/types/auth';
 import GradientButton from '@/components/ui/GradientButton';
 import VerifyModal from './VerifyModal';
 import Input from '@/components/ui/Input';

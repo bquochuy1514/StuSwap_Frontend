@@ -24,7 +24,7 @@ export default function GradientButton({
 	...props
 }: GradientButtonProps) {
 	const sizeClasses = {
-		sm: 'py-2 px-4 text-sm',
+		sm: 'py-2.5 px-4 text-sm',
 		md: 'py-3.5 px-4 text-base',
 		lg: 'py-4 px-6 text-lg',
 	};
@@ -72,7 +72,7 @@ export default function GradientButton({
 				transform hover:scale-[1.02] hover:shadow-xl  
 				focus:outline-none active:scale-[0.98] disabled:opacity-70  
 				disabled:cursor-not-allowed disabled:transform-none`,
-				fullWidth ? 'w-full mt-5' : '', // ✅ Chỉ apply w-full và mt-5 khi fullWidth = true
+				fullWidth ? 'w-full mt-3' : '',
 				sizeClasses[size],
 				variantClasses[variant],
 				className

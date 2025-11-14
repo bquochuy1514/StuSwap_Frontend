@@ -1,5 +1,7 @@
 'use client';
 
+import Footer from '@/components/layout/Footer/Footer';
+import BottomNavigation from '@/components/layout/Header/BottomNavigation';
 import Header from '@/components/layout/Header/Header';
 import { useEffect, useState } from 'react';
 
@@ -25,7 +27,7 @@ export default function MainLayout({
 	}, []);
 	return (
 		<>
-			<div className="min-h-screen bg-gradient-to-br from-gray-50 via-emerald-50/30 to-teal-50/40 relative overflow-hidden">
+			<div className="min-h-screen bg-linear-to-br from-gray-50 via-emerald-50/30 to-teal-50/40 relative overflow-hidden">
 				{/* Background decorative elements */}
 				<div className="absolute inset-0 overflow-hidden pointer-events-none">
 					<div className="absolute top-0 left-1/4 w-96 h-96 bg-emerald-400/10 rounded-full blur-3xl"></div>
@@ -39,6 +41,8 @@ export default function MainLayout({
 				>
 					{children}
 				</main>
+				<Footer />
+				<BottomNavigation />
 			</div>
 		</>
 	);

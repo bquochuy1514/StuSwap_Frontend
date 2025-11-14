@@ -1,16 +1,17 @@
+// components/layout/Header.tsx
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { usePathname, useRouter } from 'next/navigation';
-import { FiMenu, FiX } from 'react-icons/fi';
-import { MdAddCircleOutline } from 'react-icons/md';
+import { MdAddCircleOutline, MdMenu, MdClose } from 'react-icons/md';
 import { FaUserCircle } from 'react-icons/fa';
 import Logo from '@/components/ui/Logo';
 import CompactButton from '@/components/ui/CompactButton';
-import SearchInput from './SearchInput';
+import SearchBar from './SearchBar';
 import Image from 'next/image';
+import UserDropdownMenu from './UserDropDownMenu';
 
 export default function Header() {
 	const router = useRouter();
@@ -22,21 +23,11 @@ export default function Header() {
 
 	const navItems = [
 		{ label: 'Trang chủ', href: '/' },
-		{ label: 'Danh mục', href: '/categories' },
-		{ label: 'Tin mới', href: '/newest' },
+		{ label: 'Về chúng tôi', href: '/about' },
 		{ label: 'Liên hệ', href: '/contact' },
+		{ label: 'Báo lỗi / Feedback', href: '/feedback' },
 	];
 
-	const handleSearch = (
-		query: string,
-		category?: string,
-		location?: string
-	) => {
-		console.log('Search:', { query, category, location });
-		// Implement search logic
-	};
-
-	// Đóng dropdown khi click ra ngoài
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
 			if (
@@ -51,15 +42,14 @@ export default function Header() {
 			document.removeEventListener('mousedown', handleClickOutside);
 	}, []);
 
-	// Đóng menu khi đổi route
 	useEffect(() => {
 		setOpenMenu(false);
 	}, [pathname]);
 
 	return (
-		<header className="fixed top-0 left-0 w-full z-50 bg-gradient-to-r from-emerald-600 to-teal-600 shadow-lg">
+		<header className="fixed top-0 left-0 w-full z-50 shadow-xl">
 			{/* Top row - Logo, Nav, Auth */}
-			<div className="bg-emerald-600/95 backdrop-blur-sm">
+			<div className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900">
 				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 					<div className="flex items-center justify-between h-16">
 						{/* Logo */}
@@ -68,18 +58,25 @@ export default function Header() {
 						</div>
 
 						{/* Desktop nav */}
-						<nav className="hidden md:flex items-center gap-6">
+						<nav className="hidden lg:flex items-center gap-8">
 							{navItems.map((item) => (
 								<Link
 									key={item.href}
 									href={item.href}
-									className={`text-sm font-medium transition-colors ${
+									className={`relative text-sm font-semibold transition-all duration-200 group ${
 										pathname === item.href
-											? 'text-white font-bold'
-											: 'text-emerald-50 hover:text-white'
+											? 'text-white'
+											: 'text-gray-300 hover:text-white'
 									}`}
 								>
 									{item.label}
+									<span
+										className={`absolute -bottom-1 left-0 h-0.5 bg-emerald-500 transition-all duration-200 ${
+											pathname === item.href
+												? 'w-full'
+												: 'w-0 group-hover:w-full'
+										}`}
+									/>
 								</Link>
 							))}
 						</nav>
@@ -88,25 +85,28 @@ export default function Header() {
 						<div className="flex items-center gap-3">
 							{accessToken ? (
 								<>
+									{/* Nút đăng tin – luôn hiện trên mobile & desktop */}
 									<CompactButton
-										variant="secondary"
+										variant="primary"
 										size="md"
 										onClick={() => router.push('/post')}
 										icon={
 											<MdAddCircleOutline className="w-5 h-5" />
 										}
-										className="hidden sm:flex"
 									>
-										Đăng tin
+										Đăng bán
 									</CompactButton>
 
-									{/* Avatar + Dropdown */}
-									<div className="relative" ref={dropdownRef}>
+									{/* Avatar + Dropdown (chỉ desktop) */}
+									<div
+										className="relative z-50 hidden lg:block"
+										ref={dropdownRef}
+									>
 										<button
 											onClick={() =>
 												setOpenDropdown(!openDropdown)
 											}
-											className="w-10 h-10 rounded-full border-2 border-white overflow-hidden hover:scale-110 transition-all shadow-md"
+											className="relative w-10 h-10 rounded-full border-2 border-gray-600 overflow-hidden hover:scale-110 hover:border-emerald-500 transition-all duration-200 shadow-lg hover:shadow-xl"
 										>
 											{user?.avatar ? (
 												<Image
@@ -116,145 +116,207 @@ export default function Header() {
 													}
 													alt="User Avatar"
 													className="w-full h-full object-cover cursor-pointer"
-													width={70}
-													height={70}
+													width={40}
+													height={40}
 												/>
 											) : (
-												<FaUserCircle className="text-white w-full h-full" />
+												<FaUserCircle className="text-gray-300 w-full h-full" />
 											)}
 										</button>
 
-										{/* Dropdown menu */}
-										{openDropdown && (
-											<div className="absolute right-0 mt-3 w-44 bg-white border border-emerald-100 rounded-xl shadow-lg py-2 animate-fadeIn z-50">
-												<Link
-													href="/profile"
-													className="block px-4 py-2 text-sm text-gray-700 hover:bg-emerald-50"
-												>
-													Trang cá nhân
-												</Link>
-												<Link
-													href="/my-posts"
-													className="block px-4 py-2 text-sm text-gray-700 hover:bg-emerald-50"
-												>
-													Bài đăng của tôi
-												</Link>
-												<button
-													onClick={logout}
-													className="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-red-50"
-												>
-													Đăng xuất
-												</button>
-											</div>
-										)}
+										<UserDropdownMenu
+											isOpen={openDropdown}
+											user={user}
+											logout={logout}
+											onClose={() =>
+												setOpenDropdown(false)
+											}
+										/>
 									</div>
+
+									{/* Mobile menu button (logged in) */}
+									<button
+										onClick={() => setOpenMenu(!openMenu)}
+										className="lg:hidden text-gray-300 hover:text-white transition-colors p-2"
+									>
+										{openMenu ? (
+											<MdClose className="w-6 h-6" />
+										) : (
+											<MdMenu className="w-6 h-6" />
+										)}
+									</button>
 								</>
 							) : (
-								<div className="hidden sm:flex items-center gap-3">
+								<>
+									{/* Not logged in – mobile & desktop */}
 									<CompactButton
-										variant="secondary"
+										variant="outline"
 										size="md"
 										onClick={() => router.push('/login')}
+										className="hidden sm:block"
 									>
 										Đăng nhập
 									</CompactButton>
+
 									<CompactButton
-										variant="outline"
+										variant="primary"
 										size="md"
 										onClick={() => router.push('/post')}
 										icon={
 											<MdAddCircleOutline className="w-5 h-5" />
 										}
-										className="hidden lg:flex"
 									>
-										Đăng tin
+										Đăng bán
 									</CompactButton>
-								</div>
-							)}
 
-							{/* Mobile menu button */}
-							<button
-								onClick={() => setOpenMenu(!openMenu)}
-								className="md:hidden p-2 text-white hover:bg-emerald-700 rounded-lg transition"
-							>
-								{openMenu ? (
-									<FiX className="w-6 h-6" />
-								) : (
-									<FiMenu className="w-6 h-6" />
-								)}
-							</button>
+									{/* Mobile menu button (not logged in) */}
+									<button
+										onClick={() => setOpenMenu(!openMenu)}
+										className="lg:hidden text-gray-300 hover:text-white transition-colors p-2"
+									>
+										{openMenu ? (
+											<MdClose className="w-6 h-6" />
+										) : (
+											<MdMenu className="w-6 h-6" />
+										)}
+									</button>
+								</>
+							)}
 						</div>
 					</div>
 				</div>
 			</div>
 
 			{/* Bottom row - Search */}
-			<div className="bg-white/10 backdrop-blur-sm border-t border-white/20">
+			<div className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900">
 				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-					<SearchInput onSearch={handleSearch} />
+					<SearchBar />
 				</div>
 			</div>
 
-			{/* Mobile menu */}
-			{openMenu && (
-				<div className="md:hidden bg-white border-t border-emerald-100 shadow-md animate-fadeIn">
-					<div className="p-4 space-y-3">
+			{/* Mobile menu - Only show when not logged in */}
+			{openMenu && !accessToken && (
+				<div className="lg:hidden bg-gray-900 border-t border-gray-700 shadow-2xl animate-fadeIn">
+					<div className="p-4 space-y-2">
 						{navItems.map((item) => (
 							<Link
 								key={item.href}
 								href={item.href}
-								className={`block text-sm font-medium py-2 rounded-md px-3 hover:bg-emerald-50 ${
+								className={`block text-sm font-medium py-3 px-4 rounded-lg transition-all ${
 									pathname === item.href
-										? 'text-emerald-600 font-semibold'
-										: 'text-gray-700'
+										? 'bg-emerald-600 text-white shadow-md'
+										: 'text-gray-300 hover:bg-gray-800 hover:text-emerald-400'
 								}`}
 							>
 								{item.label}
 							</Link>
 						))}
 
-						{/* Mobile auth */}
-						<div className="mt-3 flex flex-col gap-2">
-							{accessToken ? (
-								<>
-									<CompactButton
-										variant="primary"
-										size="md"
-										fullWidth
-										onClick={() => router.push('/post')}
-										icon={
-											<MdAddCircleOutline className="w-5 h-5" />
-										}
-									>
-										Đăng tin
-									</CompactButton>
-									<button
-										onClick={logout}
-										className="w-full py-2 text-sm font-semibold text-red-500 bg-red-50 rounded-xl hover:bg-red-100 transition"
-									>
-										Đăng xuất
-									</button>
-								</>
-							) : (
-								<>
-									<CompactButton
-										variant="secondary"
-										size="md"
-										fullWidth
-										onClick={() => router.push('/login')}
-									>
-										Đăng nhập
-									</CompactButton>
-									<CompactButton
-										variant="primary"
-										size="md"
-										fullWidth
-										onClick={() => router.push('/register')}
-									>
-										Đăng ký
-									</CompactButton>
-								</>
-							)}
+						{/* Mobile auth for non-logged in users */}
+						<div className="pt-3 mt-3 border-t border-gray-700 space-y-2">
+							<CompactButton
+								variant="secondary"
+								size="md"
+								fullWidth
+								onClick={() => router.push('/login')}
+							>
+								Đăng nhập
+							</CompactButton>
+							<CompactButton
+								variant="primary"
+								size="md"
+								fullWidth
+								onClick={() => router.push('/register')}
+							>
+								Đăng ký
+							</CompactButton>
+						</div>
+					</div>
+				</div>
+			)}
+
+			{/* Mobile menu for logged in users - Nav items + User options */}
+			{openMenu && accessToken && (
+				<div className="lg:hidden bg-gray-900 border-t border-gray-700 shadow-2xl animate-fadeIn">
+					<div className="p-4 space-y-2">
+						{/* User info section */}
+						<div className="pb-3 mb-3 border-b border-gray-700">
+							<div className="flex items-center gap-3 p-3 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-lg">
+								<div className="relative w-12 h-12 rounded-full border-2 border-white overflow-hidden flex-shrink-0">
+									{user?.avatar ? (
+										<Image
+											src={
+												user.avatar ||
+												`${process.env.NEXT_PUBLIC_API_URL}/images/users/default_avatar.jpg`
+											}
+											alt="User Avatar"
+											className="w-full h-full object-cover"
+											width={48}
+											height={48}
+										/>
+									) : (
+										<FaUserCircle className="text-white w-full h-full" />
+									)}
+								</div>
+								<div className="flex-1 min-w-0">
+									<p className="font-semibold text-white text-sm truncate">
+										{user?.fullName || user?.email}
+									</p>
+									<p className="text-xs text-white/80 truncate">
+										{user?.email}
+									</p>
+								</div>
+							</div>
+						</div>
+
+						{/* Navigation items */}
+						{navItems.map((item) => (
+							<Link
+								key={item.href}
+								href={item.href}
+								className={`block text-sm font-medium py-3 px-4 rounded-lg transition-all ${
+									pathname === item.href
+										? 'bg-emerald-600 text-white shadow-md'
+										: 'text-gray-300 hover:bg-gray-800 hover:text-emerald-400'
+								}`}
+								onClick={() => setOpenMenu(false)}
+							>
+								{item.label}
+							</Link>
+						))}
+
+						{/* User menu items */}
+						<div className="pt-3 mt-3 border-t border-gray-700 space-y-2">
+							<Link
+								href="/profile"
+								className="block text-sm font-medium py-3 px-4 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-emerald-400 transition-all"
+								onClick={() => setOpenMenu(false)}
+							>
+								Trang cá nhân
+							</Link>
+							<Link
+								href="/my-posts"
+								className="block text-sm font-medium py-3 px-4 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-emerald-400 transition-all"
+								onClick={() => setOpenMenu(false)}
+							>
+								Quản lý tin đăng
+							</Link>
+							<Link
+								href="/cart"
+								className="block text-sm font-medium py-3 px-4 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-emerald-400 transition-all"
+								onClick={() => setOpenMenu(false)}
+							>
+								Giỏ hàng
+							</Link>
+							<button
+								onClick={() => {
+									logout();
+									setOpenMenu(false);
+								}}
+								className="w-full py-3 text-sm font-semibold text-red-400 bg-red-950/50 rounded-xl hover:bg-red-950 transition-colors"
+							>
+								Đăng xuất
+							</button>
 						</div>
 					</div>
 				</div>
