@@ -1,4 +1,6 @@
 import { ChangeEvent, ReactElement } from 'react';
+import { AxiosRequestConfig } from 'axios';
+import { JwtPayload } from 'jwt-decode';
 
 export type AuthInputProps = {
 	label: string;
@@ -20,6 +22,28 @@ export type FieldError = {
 	field: string;
 	messages: string[];
 };
+
+export interface DecodedToken extends JwtPayload {
+	exp: number; // thời gian hết hạn (epoch)
+	iat?: number; // thời gian issued at
+	id?: string; // user id (nếu backend có)
+	email?: string;
+	role?: string;
+}
+
+// Cặp token đang được lưu trữ
+export interface StoredTokens {
+	accessToken: string | null;
+	refreshToken: string | null;
+}
+
+export interface FailedRequest {
+	response: {
+		config: AxiosRequestConfig;
+		status: number;
+		data?: unknown;
+	};
+}
 
 // ------------------ Register & login types --------------------
 

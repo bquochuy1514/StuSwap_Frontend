@@ -11,8 +11,11 @@ import { HiOutlineDocumentText, HiDocumentText } from 'react-icons/hi';
 import Image from 'next/image';
 import GradientButton from '@/components/ui/GradientButton';
 import { useState } from 'react';
+import { useDropdownState } from '@/contexts/DropdownContext';
+import { cn } from '@/lib/utils';
 
 export default function BottomNavigation() {
+	const { isAnyDropdownOpen } = useDropdownState();
 	const router = useRouter();
 	const pathname = usePathname();
 	const [showLoginBanner, setShowLoginBanner] = useState(true);
@@ -62,7 +65,7 @@ export default function BottomNavigation() {
 		<>
 			{/* Banner đăng nhập - đè lên bottom navigation */}
 			{!accessToken && showLoginBanner && (
-				<div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 shadow-lg lg:hidden">
+				<div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg lg:hidden">
 					<div className="px-4 py-3 relative">
 						{/* Close button */}
 						<button
@@ -91,7 +94,13 @@ export default function BottomNavigation() {
 
 			{/* Bottom Navigation - chỉ hiện khi đã đăng nhập hoặc đã tắt banner */}
 			{(accessToken || !showLoginBanner) && (
-				<nav className="fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-200 shadow-2xl lg:hidden">
+				<nav
+					className={cn(
+						'fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-200 shadow-2xl lg:hidden transition-transform duration-200',
+						isAnyDropdownOpen && 'translate-y-96'
+						// Trượt xuống dưới khi dropdown mở
+					)}
+				>
 					<div className="flex items-end justify-around h-16 px-2 pt-1">
 						{navItems.map((item) => {
 							const isActive = pathname === item.href;

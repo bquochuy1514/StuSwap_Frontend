@@ -1,4 +1,4 @@
-import { DecodedToken, FailedRequest } from '@/types/api';
+import { DecodedToken, FailedRequest } from '@/types/auth';
 import axios from 'axios';
 import createAuthRefreshInterceptor from 'axios-auth-refresh';
 import { jwtDecode } from 'jwt-decode';

@@ -46,27 +46,27 @@ export default function CompactButton({
 		secondary: `
 			bg-white
 			text-emerald-600
-			border-2 border-emerald-300
 			shadow-md shadow-emerald-500/10
-			hover:bg-emerald-50 hover:border-emerald-400
+			hover:bg-emerald-50
 			hover:shadow-lg hover:shadow-emerald-500/20
 		`,
 		outline: `
-			bg-transparent
-			text-gray-300
-			border-2 border-gray-600
-			shadow-sm
-			hover:border-emerald-500 hover:text-emerald-400
-			hover:bg-gray-800/50
-			hover:shadow-md hover:shadow-emerald-500/20
+			bg-gray-800/50
+			text-emerald-400
+			border border-gray-700
+			shadow-sm shadow-gray-900/20
+			hover:bg-gray-700/60
+			hover:border-gray-600
+			hover:text-emerald-300
+			hover:shadow-md hover:shadow-emerald-500/10
 		`,
 		ghost: `
-			bg-gradient-to-r from-gray-700 to-gray-800
-			text-white
-			shadow-md shadow-gray-900/30
-			hover:from-gray-600 hover:to-gray-700
-			hover:shadow-lg hover:shadow-gray-900/40
-			border border-gray-600
+			bg-gray-800/80
+			text-gray-200
+			shadow-sm shadow-gray-900/20
+			hover:bg-gray-700/80
+			hover:text-white
+			hover:shadow-md hover:shadow-gray-900/30
 		`,
 	};
 

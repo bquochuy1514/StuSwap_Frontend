@@ -150,7 +150,7 @@ export default function Header() {
 								<>
 									{/* Not logged in – mobile & desktop */}
 									<CompactButton
-										variant="outline"
+										variant="secondary"
 										size="md"
 										onClick={() => router.push('/login')}
 										className="hidden sm:block"

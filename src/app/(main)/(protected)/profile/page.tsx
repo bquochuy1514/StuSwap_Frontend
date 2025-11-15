@@ -3,15 +3,16 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiUser, FiLock, FiShield, FiCamera } from 'react-icons/fi';
+import { FiUser, FiLock, FiShield } from 'react-icons/fi';
 import ProfileInfoTab from '@/components/features/users/profile/ProfileInfoTab';
+import AvatarUpload from '@/components/features/users/profile/AvatarUpload';
 import { useAuth } from '@/contexts/AuthContext';
 import ActiveButton from '@/components/ui/ActiveButton';
 
 type TabType = 'info' | 'password' | 'security';
 
 export default function ProfilePage() {
-	const { user, accessToken, setUser } = useAuth();
+	const { user, setUser } = useAuth();
 
 	const [activeTab, setActiveTab] = useState<TabType>('info');
 	const [isEditing, setIsEditing] = useState(false);
@@ -20,7 +21,7 @@ export default function ProfilePage() {
 		const roleMap: Record<string, string> = {
 			customer: 'Người dùng',
 			admin: 'Quản trị viên',
-			seller: 'Người bán',
+			premium: 'Tài khoản Premium',
 		};
 		return roleMap[role] || role;
 	};
@@ -43,25 +44,8 @@ export default function ProfilePage() {
 							transition={{ delay: 0.1 }}
 							className="bg-white shadow-lg rounded-2xl p-6"
 						>
-							{/* Avatar */}
-							<div className="relative w-32 h-32 mx-auto mb-4 group">
-								<div className="w-full h-full rounded-2xl overflow-hidden border-4 border-white shadow-xl">
-									{user?.avatar ? (
-										<img
-											src={user.avatar}
-											alt={user.fullName}
-											className="w-full h-full object-cover"
-										/>
-									) : (
-										<div className="w-full h-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white text-4xl font-bold">
-											{user?.fullName?.charAt(0)}
-										</div>
-									)}
-								</div>
-								<button className="absolute bottom-0 right-0 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-full p-2.5 shadow-lg hover:shadow-xl transition-all hover:scale-110 opacity-0 group-hover:opacity-100">
-									<FiCamera className="w-4 h-4" />
-								</button>
-							</div>
+							{/* Avatar Upload Component */}
+							<AvatarUpload maxSizeMB={5} />
 
 							{/* User Info */}
 							<div className="text-center">

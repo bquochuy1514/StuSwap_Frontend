@@ -21,6 +21,7 @@ import LocationSelector from '@/components/ui/LocationSelector';
 import { updateUserProfile } from '@/lib/api/userApi';
 import { toast } from 'react-toastify';
 import { handleApiError } from '@/lib/utils';
+import { UpdateUserProfilePayload } from '@/types/user';
 
 interface ProfileInfoTabProps {
 	user: User | null;
@@ -35,6 +36,7 @@ export default function ProfileInfoTab({
 	isEditing,
 	setIsEditing,
 }: ProfileInfoTabProps) {
+	const [hasChanges, setHasChanges] = useState(false);
 	const [addressData, setAddressData] = useState<AddressData>({
 		specificAddress: '',
 		ward: '',
@@ -50,10 +52,29 @@ export default function ProfileInfoTab({
 	});
 	const [errors, setErrors] = useState<Record<string, string[]>>({});
 
+	// Track changes khi user edit
+	useEffect(() => {
+		if (!isEditing || !user) return;
+
+		const formChanged =
+			formData.fullName !== (user.fullName || '') ||
+			formData.phone !== (user.phone || '') ||
+			formData.university !== (user.university || '') ||
+			formData.bio !== (user.bio || '');
+
+		const addressChanged =
+			addressData.specificAddress !==
+				(user.address?.specificAddress || '') ||
+			addressData.ward !== (user.address?.ward || '') ||
+			addressData.district !== (user.address?.district || '') ||
+			addressData.province !== (user.address?.province || '');
+
+		setHasChanges(formChanged || addressChanged);
+	}, [formData, addressData, isEditing, user]);
+
 	// Khởi tạo từ user data
 	useEffect(() => {
 		if (user) {
-			console.log('user = ', user);
 			setFormData({
 				fullName: user.fullName || '',
 				phone: user.phone || '',
@@ -85,13 +106,35 @@ export default function ProfileInfoTab({
 
 	const handleSave = async () => {
 		try {
-			const completeData = {
-				...formData,
-				address: addressData, // Thêm dòng này
-			};
-			// Khi save, combine data lại
-			console.log('FormData = ', completeData);
-			const response = await updateUserProfile(completeData);
+			const changedData: UpdateUserProfilePayload = {};
+
+			// Chỉ gửi fields đã thay đổi
+			if (formData.fullName !== (user?.fullName || '')) {
+				changedData.fullName = formData.fullName;
+			}
+			if (formData.phone !== (user?.phone || '')) {
+				changedData.phone = formData.phone;
+			}
+			if (formData.university !== (user?.university || '')) {
+				changedData.university = formData.university;
+			}
+			if (formData.bio !== (user?.bio || '')) {
+				changedData.bio = formData.bio;
+			}
+
+			// Check address changes
+			const addressChanged = Object.keys(addressData).some(
+				(key) =>
+					addressData[key as keyof AddressData] !==
+					(user?.address?.[key as keyof AddressData] || '')
+			);
+
+			if (addressChanged) {
+				changedData.address = addressData;
+			}
+
+			console.log('Changed Data = ', changedData);
+			const response = await updateUserProfile(changedData);
 			toast.success('Cập nhật thông tin thành công!');
 
 			setUser(response);
@@ -133,7 +176,7 @@ export default function ProfileInfoTab({
 			animate={{ opacity: 1, x: 0 }}
 			exit={{ opacity: 0, x: -20 }}
 			transition={{ duration: 0.2 }}
-			className="bg-white shadow-lg rounded-2xl p-6"
+			className="bg-white shadow-lg rounded-2xl p-6 overflow-visible"
 		>
 			{/* Header  */}
 			<div className="flex items-start gap-3 mb-6">
@@ -167,6 +210,7 @@ export default function ProfileInfoTab({
 								icon={<FiSave className="w-3.5 h-3.5" />}
 								variant="primary"
 								size="sm"
+								disabled={!hasChanges}
 							>
 								Lưu
 							</CompactButton>
@@ -184,7 +228,7 @@ export default function ProfileInfoTab({
 			</div>
 
 			{/* Fields  */}
-			<div className="space-y-4">
+			<div className="space-y-4 overflow-visible">
 				{/* Full Name  */}
 				<div className="bg-gradient-to-br from-gray-50 to-gray-100/50 rounded-xl p-4 border border-gray-200/50 hover:border-emerald-300 transition-all duration-200">
 					{isEditing ? (

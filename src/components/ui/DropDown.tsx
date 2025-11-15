@@ -5,6 +5,7 @@ import { useState, useRef, useEffect, ReactNode } from 'react';
 import { FiChevronDown, FiSearch, FiCheck, FiX } from 'react-icons/fi';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import { useDropdownState } from '@/contexts/DropdownContext';
 
 export interface DropdownItem {
 	id: string | number;
@@ -46,10 +47,19 @@ export default function Dropdown({
 	size = 'md',
 }: DropdownProps) {
 	const [isOpen, setIsOpen] = useState(false);
+	const { setDropdownOpen } = useDropdownState();
 	const [searchQuery, setSearchQuery] = useState('');
 	const [isMobile, setIsMobile] = useState(false);
 	const dropdownRef = useRef<HTMLDivElement>(null);
 	const searchInputRef = useRef<HTMLInputElement>(null);
+
+	useEffect(() => {
+		// Thông báo context khi dropdown mở/đóng
+		setDropdownOpen(isOpen);
+
+		// Cleanup khi unmount
+		return () => setDropdownOpen(false);
+	}, [isOpen, setDropdownOpen]);
 
 	const allItems = defaultItem ? [defaultItem, ...items] : items;
 
