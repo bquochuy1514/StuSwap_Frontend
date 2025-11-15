@@ -50,7 +50,7 @@ export default function Input({
 
 	const sizeClasses = {
 		sm: {
-			input: 'py-2 text-sm',
+			input: 'py-2.5 text-sm',
 			label: 'text-xs',
 			icon: 'text-base',
 			paddingLeft: 'pl-10',

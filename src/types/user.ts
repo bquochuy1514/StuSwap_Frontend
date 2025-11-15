@@ -7,3 +7,9 @@ export type UpdateUserProfilePayload = {
 	university?: string;
 	address?: AddressData;
 };
+
+export type ChangeUserPasswordPayload = {
+	currentPassword: string;
+	newPassword: string;
+	confirmPassword: string;
+};

@@ -1,6 +1,9 @@
 import { AxiosError } from 'axios';
 import api from './axiosInstance';
-import { UpdateUserProfilePayload } from '@/types/user';
+import {
+	ChangeUserPasswordPayload,
+	UpdateUserProfilePayload,
+} from '@/types/user';
 
 export const fetchUserProfile = async (token: string) => {
 	const response = await api.get('/api/users/profile', {
@@ -44,15 +47,17 @@ export const uploadAvatar = async (file: File) => {
 	}
 };
 
-// export const changeUserPassword = async (formData) => {
-// 	try {
-// 		const response = await api.put(`api/users/change-password`, formData);
+export const changeUserPassword = async (
+	formData: ChangeUserPasswordPayload
+) => {
+	try {
+		const response = await api.put(`api/users/change-password`, formData);
 
-// 		return response.data;
-// 	} catch (error) {
-// 		if (error instanceof AxiosError && error.response?.data) {
-// 			throw error.response?.data || error;
-// 		}
-// 		throw error;
-// 	}
-// };
+		return response.data;
+	} catch (error) {
+		if (error instanceof AxiosError && error.response?.data) {
+			throw error.response?.data || error;
+		}
+		throw error;
+	}
+};
