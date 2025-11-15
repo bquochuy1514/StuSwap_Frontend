@@ -93,6 +93,7 @@ export default function Header() {
 										icon={
 											<MdAddCircleOutline className="w-5 h-5" />
 										}
+										className="hidden sm:flex"
 									>
 										Đăng bán
 									</CompactButton>

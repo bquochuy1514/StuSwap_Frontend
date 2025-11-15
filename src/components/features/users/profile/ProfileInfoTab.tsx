@@ -179,21 +179,23 @@ export default function ProfileInfoTab({
 			className="bg-white shadow-lg rounded-2xl p-6 overflow-visible"
 		>
 			{/* Header  */}
-			<div className="flex items-start gap-3 mb-6">
-				<div className="p-2.5 bg-emerald-100 rounded-xl">
-					<FiUser className="w-5 h-5 text-emerald-600" />
-				</div>
-				<div className="flex-1">
-					<h2 className="text-2xl font-bold text-gray-900 mb-1">
-						Thông tin cá nhân
-					</h2>
-					<p className="text-sm text-gray-500">
-						Quản lý thông tin hồ sơ của bạn
-					</p>
+			<div className="flex flex-col sm:flex-row sm:items-start gap-3 mb-6">
+				<div className="flex items-start gap-3 flex-1 min-w-0">
+					<div className="p-2.5 bg-emerald-100 rounded-xl flex-shrink-0">
+						<FiUser className="w-5 h-5 text-emerald-600" />
+					</div>
+					<div className="flex-1 min-w-0">
+						<h2 className="text-2xl font-bold text-gray-900 mb-1 break-words">
+							Thông tin cá nhân
+						</h2>
+						<p className="text-sm text-gray-500">
+							Quản lý thông tin hồ sơ của bạn
+						</p>
+					</div>
 				</div>
 
 				{/* Edit Buttons */}
-				<div className="flex gap-2">
+				<div className="flex gap-2 sm:flex-shrink-0">
 					{!isEditing ? (
 						<CompactButton
 							onClick={() => setIsEditing(true)}
