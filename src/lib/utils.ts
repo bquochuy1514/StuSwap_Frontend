@@ -36,6 +36,7 @@ export const handleApiError = <T extends Record<string, string[]>>(
 			const field = item.field as keyof T;
 			errorObj[field] = item.messages as T[keyof T];
 		});
+		console.log('Lỗi từ handleApiError: ', errorObj);
 		return errorObj;
 	}
 

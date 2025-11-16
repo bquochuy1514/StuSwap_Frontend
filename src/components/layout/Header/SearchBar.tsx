@@ -36,7 +36,7 @@ export default function SearchBar({ className }: { className?: string }) {
 			const transformedData: DropdownItem[] = data.map((category) => ({
 				id: category.id,
 				label: category.name,
-				value: category.slug,
+				value: category.id,
 			}));
 
 			setCategoryItems(transformedData);
@@ -105,7 +105,7 @@ export default function SearchBar({ className }: { className?: string }) {
 				<Dropdown
 					items={locationItems}
 					value={selectedLocation}
-					onChange={setSelectedLocation}
+					onChange={(value) => setSelectedLocation(String(value))}
 					placeholder="Vị trí"
 					icon={<IoLocationOutline className="w-4 h-4" />}
 					variant="default"
@@ -119,7 +119,7 @@ export default function SearchBar({ className }: { className?: string }) {
 					value={searchQuery}
 					onChange={setSearchQuery}
 					onSearch={handleSearch}
-					placeholder="Tìm kiếm..."
+					placeholder="Tìm kiếm đồ cũ..."
 					showIcon={true}
 					size="md"
 				/>
@@ -128,7 +128,7 @@ export default function SearchBar({ className }: { className?: string }) {
 				<Dropdown
 					items={categoryItems}
 					value={selectedCategory}
-					onChange={setSelectedCategory}
+					onChange={(value) => setSelectedCategory(String(value))}
 					placeholder="Danh mục"
 					icon={<HiOutlineViewGrid className="w-4 h-4" />}
 					variant="default"
@@ -139,7 +139,15 @@ export default function SearchBar({ className }: { className?: string }) {
 				{/* Search Button */}
 				<button
 					onClick={handleSearch}
-					className="flex items-center gap-2 cursor-pointer flex-shrink-0 px-5 h-11 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-medium text-sm rounded-r-xl transition-all duration-200 shadow-md hover:shadow-lg group"
+					className="flex items-center gap-2 cursor-pointer flex-shrink-0 
+						px-5 h-11 text-white text-sm font-medium 
+						rounded-r-xl transition-all duration-300 ease-out bg-gradient-to-r from-emerald-500 to-teal-600
+						shadow-md shadow-emerald-500/20
+						hover:from-emerald-600 hover:to-teal-700
+						hover:shadow-lg hover:shadow-emerald-500/30
+						hover:scale-[1.02]
+						active:scale-[0.98]
+						focus:outline-none focus:ring-2 focus:ring-emerald-400/50 group"
 				>
 					<FaSearch className="w-3.5 h-3.5 group-hover:scale-110 transition-transform" />
 					<span>Tìm kiếm</span>
@@ -152,7 +160,7 @@ export default function SearchBar({ className }: { className?: string }) {
 				<Dropdown
 					items={locationItems}
 					value={selectedLocation}
-					onChange={setSelectedLocation}
+					onChange={(value) => setSelectedLocation(String(value))}
 					placeholder="Vị trí"
 					icon={<IoLocationOutline className="w-4 h-4" />}
 					variant="compact"
@@ -167,7 +175,7 @@ export default function SearchBar({ className }: { className?: string }) {
 					value={searchQuery}
 					onChange={setSearchQuery}
 					onSearch={handleSearch}
-					placeholder="Tìm kiếm..."
+					placeholder="Tìm kiếm đồ cũ..."
 					showIcon={false}
 					expandable={true}
 					size="md"
@@ -176,7 +184,9 @@ export default function SearchBar({ className }: { className?: string }) {
 				{/* Search Button */}
 				<button
 					onClick={handleSearch}
-					className="flex items-center justify-center gap-2 cursor-pointer flex-shrink-0 px-4 sm:px-5 h-11 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-medium text-sm rounded-r-xl transition-all duration-200 shadow-md hover:shadow-lg group"
+					className="flex items-center justify-center gap-2 cursor-pointer flex-shrink-0 px-4 sm:px-5 h-11 
+					bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 
+					text-white font-medium text-sm rounded-r-xl transition-all duration-200 shadow-md hover:shadow-lg group"
 				>
 					<FaSearch className="w-3.5 h-3.5 group-hover:scale-110 transition-transform" />
 					<span className="hidden sm:inline">Tìm kiếm</span>

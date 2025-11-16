@@ -22,6 +22,7 @@ import { updateUserProfile } from '@/lib/api/userApi';
 import { toast } from 'react-toastify';
 import { handleApiError } from '@/lib/utils';
 import { UpdateUserProfilePayload } from '@/types/user';
+import LoadingOverlay from '@/components/ui/LoadingOverlay';
 
 interface ProfileInfoTabProps {
 	user: User | null;
@@ -37,6 +38,8 @@ export default function ProfileInfoTab({
 	setIsEditing,
 }: ProfileInfoTabProps) {
 	const [hasChanges, setHasChanges] = useState(false);
+	const [locationKey, setLocationKey] = useState(0); // Key để force re-mount
+	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [addressData, setAddressData] = useState<AddressData>({
 		specificAddress: '',
 		ward: '',
@@ -105,6 +108,7 @@ export default function ProfileInfoTab({
 	};
 
 	const handleSave = async () => {
+		setIsSubmitting(true);
 		try {
 			const changedData: UpdateUserProfilePayload = {};
 
@@ -144,6 +148,8 @@ export default function ProfileInfoTab({
 			if (fieldErrors) {
 				setErrors(fieldErrors);
 			}
+		} finally {
+			setIsSubmitting(false);
 		}
 	};
 
@@ -157,15 +163,17 @@ export default function ProfileInfoTab({
 		});
 
 		// Reset addressData
-		if (user?.address) {
-			setAddressData({
-				specificAddress: user.address.specificAddress || '',
-				ward: user.address.ward || '',
-				district: user.address.district || '',
-				province: user.address.province || '',
-			});
-		}
+		const resetAddress = {
+			specificAddress: user?.address?.specificAddress || '',
+			ward: user?.address?.ward || '',
+			district: user?.address?.district || '',
+			province: user?.address?.province || '',
+		};
 
+		setAddressData(resetAddress);
+
+		// Force re-mount LocationSelector bằng cách thay đổi key
+		setLocationKey((prev) => prev + 1);
 		setIsEditing(false);
 	};
 
@@ -360,6 +368,7 @@ export default function ProfileInfoTab({
 					</label>
 					<div className="bg-gradient-to-br from-gray-50 to-gray-100/50 rounded-xl p-4 border border-gray-200/50 hover:border-emerald-300 transition-all duration-200">
 						<LocationSelector
+							key={locationKey} // Force re-mount khi key thay đổi
 							addressData={addressData}
 							onChange={(value) => {
 								setAddressData(value);
@@ -417,6 +426,7 @@ export default function ProfileInfoTab({
 					</span>
 				</div>
 			</div>
+			<LoadingOverlay isVisible={isSubmitting} message="Đang tải..." />
 		</motion.div>
 	);
 }

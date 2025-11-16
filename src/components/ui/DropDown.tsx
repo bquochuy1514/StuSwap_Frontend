@@ -10,13 +10,13 @@ import { useDropdownState } from '@/contexts/DropdownContext';
 export interface DropdownItem {
 	id: string | number;
 	label: string;
-	value?: string;
+	value?: string | number;
 }
 
 interface DropdownProps {
 	items: DropdownItem[];
-	value: string;
-	onChange: (value: string) => void;
+	value: string | number;
+	onChange: (value: string | number) => void;
 	placeholder?: string;
 	label?: string;
 	icon?: ReactNode;
@@ -63,8 +63,11 @@ export default function Dropdown({
 
 	const allItems = defaultItem ? [defaultItem, ...items] : items;
 
+	// Tìm item dựa trên value (so sánh với id hoặc value của item)
 	const currentItem = allItems.find(
-		(item) => item.label === value || String(item.id) === value
+		(item) =>
+			String(item.id) === String(value) ||
+			String(item.value) === String(value)
 	);
 
 	const isDefaultSelected = defaultItem && currentItem?.id === defaultItem.id;
@@ -127,7 +130,8 @@ export default function Dropdown({
 		if (defaultItem && item.id === defaultItem.id) {
 			onChange('');
 		} else {
-			onChange(item.label);
+			// Ưu tiên trả về value, nếu không có thì trả về id
+			onChange(item.value !== undefined ? item.value : item.id);
 		}
 		setIsOpen(false);
 		setSearchQuery('');
@@ -153,7 +157,7 @@ export default function Dropdown({
 
 	const currentVariant = variantStyles[variant];
 
-	// Animation variants (giữ nguyên như cũ)
+	// Animation variants
 	const desktopMenuVariants: Variants = {
 		hidden: {
 			opacity: 0,
@@ -251,6 +255,7 @@ export default function Dropdown({
 
 			{/* Dropdown Button */}
 			<motion.button
+				type="button"
 				onClick={() => setIsOpen(!isOpen)}
 				whileHover={{ scale: 1.02 }}
 				whileTap={{ scale: 0.98 }}
@@ -373,12 +378,15 @@ export default function Dropdown({
 													item.id ===
 														defaultItem.id &&
 													value === '') ||
-												item.label === value ||
-												String(item.id) === value;
+												String(item.id) ===
+													String(value) ||
+												String(item.value) ===
+													String(value);
 
 											return (
 												<div key={item.id}>
 													<motion.button
+														type="button"
 														custom={index}
 														variants={itemVariants}
 														initial="hidden"
@@ -525,6 +533,7 @@ export default function Dropdown({
 										</h3>
 									</div>
 									<motion.button
+										type="button"
 										whileTap={{ scale: 0.9 }}
 										onClick={() => setIsOpen(false)}
 										className="p-2 hover:bg-gray-100 rounded-full transition-colors"
@@ -571,8 +580,10 @@ export default function Dropdown({
 													item.id ===
 														defaultItem.id &&
 													value === '') ||
-												item.label === value ||
-												String(item.id) === value;
+												String(item.id) ===
+													String(value) ||
+												String(item.value) ===
+													String(value);
 
 											const isDefaultItem =
 												defaultItem && index === 0;
@@ -580,6 +591,7 @@ export default function Dropdown({
 											return (
 												<div key={item.id}>
 													<motion.button
+														type="button"
 														custom={index}
 														variants={itemVariants}
 														initial="hidden"

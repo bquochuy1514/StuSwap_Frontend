@@ -12,6 +12,7 @@ import {
 } from 'react-icons/md';
 import { BiMessageDetail } from 'react-icons/bi';
 import { FaLightbulb, FaHandshake } from 'react-icons/fa';
+import PageHeader from '@/components/ui/PageHeader';
 
 export default function AboutPage() {
 	const values = [
@@ -57,18 +58,12 @@ export default function AboutPage() {
 	return (
 		<div className="max-w-5xl mx-auto px-4 py-8 lg:py-12">
 			{/* Hero Section */}
-			<div className="text-center mb-12">
-				<div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl mb-4 shadow-lg">
-					<MdSchool className="w-8 h-8 text-white" />
-				</div>
-				<h1 className="text-3xl lg:text-4xl font-bold mb-3 bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
-					Giới thiệu về StudentSwap
-				</h1>
-				<p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
-					Một dự án cá nhân giúp sinh viên trao đổi đồ cũ nhanh chóng
-					& tiện lợi
-				</p>
-			</div>
+			<PageHeader
+				icon={<MdSchool />}
+				title="Giới thiệu về StudentSwap"
+				description="Một dự án cá nhân giúp sinh viên trao đổi đồ cũ nhanh chóng
+					& tiện lợi"
+			/>
 
 			{/* Story Section */}
 			<div className="bg-white rounded-2xl p-6 lg:p-8 shadow-sm border border-gray-200 mb-8">

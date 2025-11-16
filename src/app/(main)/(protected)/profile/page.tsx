@@ -4,7 +4,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiUser, FiLock, FiShield } from 'react-icons/fi';
+import { FiUser, FiLock, FiShield, FiLogOut } from 'react-icons/fi';
 import ProfileInfoTab from '@/components/features/users/profile/ProfileInfoTab';
 import ChangePasswordTab from '@/components/features/users/profile/ChangePasswordTab';
 import AvatarUpload from '@/components/features/users/profile/AvatarUpload';
@@ -14,7 +14,7 @@ import ActiveButton from '@/components/ui/ActiveButton';
 type TabType = 'info' | 'password' | 'security';
 
 export default function ProfilePage() {
-	const { user, setUser } = useAuth();
+	const { user, setUser, logout } = useAuth();
 
 	const [activeTab, setActiveTab] = useState<TabType>('info');
 	const [isEditing, setIsEditing] = useState(false);
@@ -57,16 +57,25 @@ export default function ProfilePage() {
 								<p className="text-sm text-gray-500 mb-3 break-all">
 									{user?.email}
 								</p>
+
+								{/* User Role Badge */}
 								<div className="flex items-center justify-center gap-2">
 									<span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">
 										{getRoleLabel(user?.role || '')}
 									</span>
-									{user?.isActive && (
-										<span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">
-											Hoạt động
-										</span>
-									)}
 								</div>
+
+								{/* Logout Button */}
+								<button
+									onClick={logout}
+									className="flex items-center justify-center cursor-pointer gap-2 w-full py-2 mt-4 
+										text-sm font-medium text-red-600 bg-red-50 
+										hover:bg-red-100 active:bg-red-200 
+										rounded-xl transition-all"
+								>
+									<FiLogOut className="w-4 h-4" />
+									Đăng xuất
+								</button>
 							</div>
 						</motion.div>
 
@@ -84,7 +93,7 @@ export default function ProfilePage() {
 									setActiveTab('info');
 									setIsEditing(false);
 								}}
-								size="md"
+								size="sm"
 							>
 								Thông tin cá nhân
 							</ActiveButton>
@@ -96,9 +105,7 @@ export default function ProfilePage() {
 									setActiveTab('password');
 									setIsEditing(false);
 								}}
-								gradientFrom="from-blue-500"
-								gradientTo="to-indigo-600"
-								size="md"
+								size="sm"
 							>
 								Thay đổi mật khẩu
 							</ActiveButton>
@@ -110,9 +117,7 @@ export default function ProfilePage() {
 									setActiveTab('security');
 									setIsEditing(false);
 								}}
-								gradientFrom="from-purple-500"
-								gradientTo="to-pink-600"
-								size="md"
+								size="sm"
 							>
 								Bảo mật
 							</ActiveButton>
@@ -143,8 +148,8 @@ export default function ProfilePage() {
 									className="bg-white shadow-lg rounded-2xl p-6"
 								>
 									<div className="flex items-start gap-3 mb-6">
-										<div className="p-2.5 bg-purple-100 rounded-xl">
-											<FiShield className="w-5 h-5 text-purple-600" />
+										<div className="p-2.5 bg-emerald-100 rounded-xl">
+											<FiShield className="w-5 h-5 text-emerald-600" />
 										</div>
 										<div className="flex-1">
 											<h2 className="text-2xl font-bold text-gray-900 mb-1">

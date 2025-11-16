@@ -5,11 +5,12 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FiLock, FiShield } from 'react-icons/fi';
 import { toast } from 'react-toastify';
-import CompactButton from '@/components/ui/CompactButton';
 import { changeUserPassword } from '@/lib/api/userApi';
 import { ChangeUserPasswordPayload } from '@/types/user';
 import Input from '@/components/ui/Input';
 import { handleApiError } from '@/lib/utils';
+import GradientButton from '@/components/ui/GradientButton';
+import LoadingOverlay from '@/components/ui/LoadingOverlay';
 
 interface PasswordErrors {
 	currentPassword?: string;
@@ -117,8 +118,8 @@ export default function ChangePasswordTab() {
 		>
 			{/* Header */}
 			<div className="flex items-start gap-3 mb-6 pb-6 border-b border-gray-200">
-				<div className="p-2.5 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl shadow-lg">
-					<FiLock className="w-5 h-5 text-white" />
+				<div className="p-2.5 bg-gradient-to-br bg-emerald-100 rounded-xl shadow-lg">
+					<FiLock className="w-5 h-5 text-emerald-600" />
 				</div>
 				<div className="flex-1">
 					<h2 className="text-2xl font-bold text-gray-900 mb-1">
@@ -196,29 +197,22 @@ export default function ChangePasswordTab() {
 				/>
 
 				{/* Submit Button */}
-				<motion.div
-					initial={{ opacity: 0, y: 10 }}
-					animate={{ opacity: 1, y: 0 }}
-					transition={{ delay: 0.3 }}
-					className=""
+				<GradientButton
+					type="submit"
+					isLoading={isSubmitting}
+					loadingText="Đang xử lý..."
+					size="sm"
+					variant="primary"
+					icon={
+						isSubmitting ? (
+							<div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+						) : (
+							<FiLock />
+						)
+					}
 				>
-					<CompactButton
-						type="submit"
-						variant="primary"
-						size="lg"
-						fullWidth
-						disabled={isSubmitting}
-						icon={
-							isSubmitting ? (
-								<div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-							) : (
-								<FiLock />
-							)
-						}
-					>
-						{isSubmitting ? 'Đang xử lý...' : 'Đổi mật khẩu'}
-					</CompactButton>
-				</motion.div>
+					Đổi mật khẩu
+				</GradientButton>
 
 				{/* Security Notice */}
 				<motion.div
@@ -239,6 +233,8 @@ export default function ChangePasswordTab() {
 					</div>
 				</motion.div>
 			</form>
+
+			<LoadingOverlay isVisible={isSubmitting} message="Đang tải..." />
 		</motion.div>
 	);
 }

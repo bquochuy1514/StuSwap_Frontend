@@ -197,7 +197,8 @@ export default function LocationSelector({
 	}, [addressData, provinces, isInitializing]);
 
 	// Handle province change
-	const handleProvinceChange = async (provinceName: string) => {
+	const handleProvinceChange = async (value: string | number) => {
+		const provinceName = String(value);
 		setSelectedProvince(provinceName);
 		setSelectedDistrict('');
 		setSelectedWard('');
@@ -217,7 +218,8 @@ export default function LocationSelector({
 	};
 
 	// Handle district change
-	const handleDistrictChange = async (districtName: string) => {
+	const handleDistrictChange = async (value: string | number) => {
+		const districtName = String(value);
 		setSelectedDistrict(districtName);
 		setSelectedWard('');
 
@@ -235,7 +237,8 @@ export default function LocationSelector({
 	};
 
 	// Handle ward change
-	const handleWardChange = (wardName: string) => {
+	const handleWardChange = (value: string | number) => {
+		const wardName = String(value);
 		setSelectedWard(wardName);
 	};
 
@@ -299,16 +302,19 @@ export default function LocationSelector({
 	const provinceItems = provinces.map((p) => ({
 		id: p.code,
 		label: p.name,
+		value: p.name, // Sử dụng name làm value để dễ so sánh
 	}));
 
 	const districtItems = districts.map((d) => ({
 		id: d.code,
 		label: d.name,
+		value: d.name,
 	}));
 
 	const wardItems = wards.map((w) => ({
 		id: w.code,
 		label: w.name,
+		value: w.name,
 	}));
 
 	return (

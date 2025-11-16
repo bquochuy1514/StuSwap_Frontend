@@ -1,15 +1,10 @@
 // src/app/(main)/(public)/contact/page.tsx
 import Link from 'next/link';
 import React from 'react';
-import {
-	MdEmail,
-	MdPhone,
-	MdAccessTime,
-	MdLocationOn,
-	MdSchool,
-} from 'react-icons/md';
+import { MdEmail, MdAccessTime, MdSchool } from 'react-icons/md';
 import { FaFacebookF, FaGithub } from 'react-icons/fa';
 import { BiMessageDetail } from 'react-icons/bi';
+import PageHeader from '@/components/ui/PageHeader';
 
 export default function ContactPage() {
 	const contactInfo = [
@@ -23,14 +18,14 @@ export default function ContactPage() {
 		{
 			icon: FaFacebookF,
 			title: 'Facebook',
-			content: 'Bùi Quốc Huy',
+			content: 'Huy Quoc Bui',
 			link: 'https://www.facebook.com/bquochuy1514',
 			description: 'Nhắn tin trực tiếp qua Facebook',
 		},
 		{
 			icon: FaGithub,
 			title: 'Github',
-			content: 'Bùi Quốc Huy',
+			content: 'bquochuy1514',
 			link: 'https://github.com/bquochuy1514',
 			description: 'Liên hệ với mình qua Github',
 		},
@@ -45,19 +40,13 @@ export default function ContactPage() {
 	return (
 		<div className="max-w-5xl mx-auto px-4 py-8 lg:py-12">
 			{/* Header Section */}
-			<div className="text-center mb-10">
-				<div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl mb-4 shadow-lg">
-					<BiMessageDetail className="w-8 h-8 text-white" />
-				</div>
-				<h1 className="text-3xl lg:text-4xl font-bold mb-3 bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
-					Liên hệ với mình
-				</h1>
-				<p className="text-gray-600 max-w-2xl mx-auto leading-relaxed">
-					Mình là sinh viên và đây là dự án cá nhân về chợ đồ cũ dành
+			<PageHeader
+				icon={<BiMessageDetail />}
+				title="Liên hệ với mình"
+				description="Mình là sinh viên và đây là dự án cá nhân về chợ đồ cũ dành
 					cho sinh viên. Nếu bạn có thắc mắc, góp ý hoặc cần hỗ trợ,
-					đừng ngại liên hệ nhé!
-				</p>
-			</div>
+					đừng ngại liên hệ nhé!"
+			/>
 
 			<div className="grid lg:grid-cols-3 gap-6 mb-8">
 				{/* Contact Cards */}

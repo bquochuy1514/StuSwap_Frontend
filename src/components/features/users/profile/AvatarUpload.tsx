@@ -1,5 +1,3 @@
-// components/features/users/profile/AvatarUpload.tsx - Full code với fix
-
 'use client';
 
 import React, { useState, useRef } from 'react';
@@ -223,41 +221,33 @@ export default function AvatarUpload({
 						{/* View Avatar (only if avatar exists) */}
 						{displayAvatar && (
 							<>
-								<motion.button
-									whileHover={{
-										backgroundColor: 'rgb(249 250 251)',
-									}}
-									whileTap={{ scale: 0.98 }}
+								<button
 									onClick={handleViewFullImage}
-									className="w-full px-3 py-2 cursor-pointer flex items-center gap-2.5 text-left text-gray-700 hover:text-blue-600 transition-colors"
+									className="w-full px-3 py-2 cursor-pointer flex items-center gap-2.5 text-left text-gray-700 transition-all duration-200 hover:bg-blue-50 hover:text-blue-600 active:scale-95"
 								>
-									<div className="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
+									<div className="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0 transition-colors duration-200">
 										<FiEye className="w-3.5 h-3.5 text-blue-600" />
 									</div>
 									<span className="text-sm font-medium">
 										Xem ảnh
 									</span>
-								</motion.button>
+								</button>
 								<div className="h-px bg-gray-200" />
 							</>
 						)}
 
 						{/* Upload Avatar */}
-						<motion.button
-							whileHover={{
-								backgroundColor: 'rgb(249 250 251)',
-							}}
-							whileTap={{ scale: 0.98 }}
+						<button
 							onClick={handleClickUpload}
-							className="w-full px-3 py-2 cursor-pointer flex items-center gap-2.5 text-left text-gray-700 hover:text-emerald-600 transition-colors"
+							className="w-full px-3 py-2 cursor-pointer flex items-center gap-2.5 text-left text-gray-700 transition-all duration-200 hover:bg-emerald-50 hover:text-emerald-600 active:scale-95"
 						>
-							<div className="w-7 h-7 rounded-lg bg-emerald-50 flex items-center justify-center flex-shrink-0">
+							<div className="w-7 h-7 rounded-lg bg-emerald-50 flex items-center justify-center flex-shrink-0 transition-colors duration-200">
 								<FiUpload className="w-3.5 h-3.5 text-emerald-600" />
 							</div>
 							<span className="text-sm font-medium">
 								{displayAvatar ? 'Thay đổi' : 'Tải lên'}
 							</span>
-						</motion.button>
+						</button>
 					</motion.div>
 				)}
 			</AnimatePresence>

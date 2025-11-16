@@ -125,9 +125,20 @@ export default function BottomNavigation() {
 												</div>
 
 												{/* Label bên dưới */}
-												<span className="absolute -bottom-5 left-1/2 -translate-x-1/2 text-xs font-medium text-emerald-600 whitespace-nowrap">
+												<span
+													className={`absolute -bottom-5 left-1/2 -translate-x-1/2 text-xs font-medium ${
+														isActive
+															? 'text-emerald-600'
+															: 'text-gray-600'
+													} whitespace-nowrap`}
+												>
 													{item.label}
 												</span>
+
+												{/* Active indicator */}
+												{isActive && (
+													<div className="absolute -bottom-7 left-1/2 -translate-x-1/2 w-1 h-1 bg-emerald-600 rounded-full" />
+												)}
 											</div>
 										</div>
 									) : (

@@ -2,6 +2,7 @@
 'use client';
 
 import GradientButton from '@/components/ui/GradientButton';
+import PageHeader from '@/components/ui/PageHeader';
 import React, { useState } from 'react';
 import {
 	MdFeedback,
@@ -152,18 +153,12 @@ export default function FeedbackPage() {
 	return (
 		<div className="max-w-3xl mx-auto px-4 py-8 lg:py-12">
 			{/* Header */}
-			<div className="text-center mb-10">
-				<div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl mb-4 shadow-lg">
-					<MdFeedback className="w-8 h-8 text-white" />
-				</div>
-				<h1 className="text-3xl lg:text-4xl font-bold mb-3 bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
-					Gửi phản hồi
-				</h1>
-				<p className="text-gray-600 max-w-2xl mx-auto leading-relaxed">
-					Ý kiến của bạn rất quan trọng để giúp StudentSwap ngày càng
-					tốt hơn. Hãy chia sẻ suy nghĩ của bạn với mình nhé!
-				</p>
-			</div>
+			<PageHeader
+				icon={<MdFeedback />}
+				title="Gửi phản hồi"
+				description="Ý kiến của bạn rất quan trọng để giúp StudentSwap ngày càng
+					tốt hơn. Hãy chia sẻ suy nghĩ của bạn với mình nhé!"
+			/>
 
 			{/* Form */}
 			<form
