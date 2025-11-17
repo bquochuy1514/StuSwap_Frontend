@@ -39,7 +39,7 @@ export default function RegisterPage() {
 
 			{/* Header */}
 			<AuthHeader
-				title="Tạo tài khoản StudentSwap"
+				title="Đăng ký tài khoản StudentSwap"
 				content1="Tham gia cộng đồng sinh viên"
 				content2="Nơi mua bán, trao đổi đồ cũ dễ dàng"
 				theme="light"

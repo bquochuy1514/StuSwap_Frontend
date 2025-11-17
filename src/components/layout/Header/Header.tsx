@@ -190,7 +190,7 @@ export default function Header() {
 
 			{/* Bottom row - Search */}
 			<div className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900">
-				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-3 pt-1">
 					<SearchBar />
 				</div>
 			</div>

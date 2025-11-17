@@ -44,7 +44,7 @@ export default function AuthHeader({
 					<span
 						className={`font-semibold text-transparent bg-gradient-to-r ${current.studentSwap} bg-clip-text`}
 					>
-						StuSwap {' — '}
+						StudentSwap {' — '}
 					</span>
 				)}
 				{content2}

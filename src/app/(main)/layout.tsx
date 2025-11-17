@@ -27,6 +27,7 @@ export default function MainLayout({
 	}, []);
 	return (
 		<>
+			<Header />
 			<div className="min-h-screen bg-linear-to-br from-gray-50 via-emerald-50/30 to-teal-50/40 relative overflow-hidden">
 				{/* Background decorative elements */}
 				<div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -34,16 +35,15 @@ export default function MainLayout({
 					<div className="absolute bottom-0 right-1/4 w-96 h-96 bg-teal-400/8 rounded-full blur-3xl"></div>
 					<div className="absolute top-1/2 left-1/2 w-72 h-72 bg-cyan-400/6 rounded-full blur-3xl"></div>
 				</div>
-				<Header />
 				<main
-					className="relative z-10"
+					className="relative min-h-screen z-10"
 					style={{ paddingTop: headerHeight }}
 				>
 					{children}
 				</main>
-				<Footer />
-				<BottomNavigation />
 			</div>
+			<Footer />
+			<BottomNavigation />
 		</>
 	);
 }

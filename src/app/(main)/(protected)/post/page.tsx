@@ -23,6 +23,7 @@ import { fetchCategories } from '@/lib/api/categoryApi';
 import GradientButton from '@/components/ui/GradientButton';
 import LoadingOverlay from '@/components/ui/LoadingOverlay';
 import ImageUpload from '@/components/features/products/post/ImageUpload';
+import ProductPreviewDemo from '@/components/features/products/post/ProductPreviewDemo';
 
 const CONDITION_OPTIONS = [
 	{ value: ProductCondition.NEW, label: 'Mới 100%', icon: '✨' },
@@ -52,6 +53,13 @@ const itemVariants = {
 	},
 };
 
+// Interface cho preview item
+export interface ImagePreview {
+	id: string;
+	file: File;
+	url: string;
+}
+
 export default function PostProductPage() {
 	const [formData, setFormData] = useState<ProductFormData>({
 		title: '',
@@ -68,9 +76,12 @@ export default function PostProductPage() {
 		images: [],
 	});
 
+	// State mới để giữ preview images
+	const [imagePreviews, setImagePreviews] = useState<ImagePreview[]>([]);
+
 	const [categoryItems, setCategoryItems] = useState<DropdownItem[]>([]);
-	const [imagePreviews, setImagePreviews] = useState<string[]>([]);
 	const [errors, setErrors] = useState<Record<string, string[]>>({});
+	const [locationKey, setLocationKey] = useState(0); // Key để force re-mount
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	useEffect(() => {
@@ -88,6 +99,16 @@ export default function PostProductPage() {
 		};
 
 		getCategories();
+	}, []);
+
+	// Cleanup URLs khi component unmount
+	useEffect(() => {
+		// Chỉ cleanup khi component unmount
+		return () => {
+			imagePreviews.forEach((preview) => {
+				URL.revokeObjectURL(preview.url);
+			});
+		};
 	}, []);
 
 	const handleInputChange = (
@@ -189,6 +210,30 @@ export default function PostProductPage() {
 
 			toast.success('Đăng sản phẩm thành công!');
 			console.log('Form data:', formData);
+
+			// Reset form data về trạng thái ban đầu
+			setFormData({
+				title: '',
+				description: '',
+				price: '',
+				condition: ProductCondition.GOOD,
+				category_id: '',
+				address: {
+					specificAddress: '',
+					ward: '',
+					district: '',
+					province: '',
+				},
+				images: [],
+			});
+
+			// Cleanup image previews cũ và reset
+			imagePreviews.forEach((preview) => {
+				URL.revokeObjectURL(preview.url);
+			});
+			setImagePreviews([]);
+			// Force re-mount LocationSelector bằng cách thay đổi key
+			setLocationKey((prev) => prev + 1);
 		} catch (error) {
 			const fieldErrors = handleApiError(error);
 			if (fieldErrors) {
@@ -199,256 +244,283 @@ export default function PostProductPage() {
 		}
 	};
 
+	// Get selected category name
+	const selectedCategory = categoryItems.find((item) => {
+		return item.value == formData.category_id;
+	});
+
 	return (
-		<div className="min-h-screen py-8 px-4">
-			<div className="max-w-5xl mx-auto">
+		<div className="min-h-screen py-8 px-4 bg-gradient-to-br from-gray-50 via-white to-gray-50">
+			<div className="max-w-7xl mx-auto">
 				{/* Header */}
-				<PageHeader
-					icon={<FiPackage />}
-					title="Đăng sản phẩm mới"
-					description="Điền thông tin để bán sản phẩm của bạn"
-				/>
-
-				{/* Form */}
-				<motion.form
-					variants={containerVariants}
-					initial="hidden"
-					animate="visible"
-					onSubmit={handleSubmit}
-					className="bg-white rounded-2xl shadow-xl p-6 md:p-8 space-y-6"
-				>
-					{/* Title */}
-					<motion.div variants={itemVariants}>
-						<Input
-							label="Tiêu đề tin đăng"
-							name="title"
-							value={formData.title}
-							onChange={handleInputChange}
-							placeholder="VD: iPhone 13 Pro Max 256GB"
-							type="text"
-							icon={<FiPackage />}
-							error={errors.title?.[0]}
-							theme="light"
-							size="sm"
-						/>
-					</motion.div>
-
-					{/* Description */}
-					<Input
-						label="Mô tả sản phẩm"
-						name="description"
-						as="textarea"
-						rows={5}
-						icon={<FiFileText />}
-						value={formData.description}
-						onChange={handleInputChange}
-						placeholder="Mô tả chi tiết về sản phẩm: tình trạng, xuất xứ, thời gian sử dụng..."
-						error={errors.description?.[0]}
-						theme="light"
-						size="sm"
+				<div className="mb-8">
+					<PageHeader
+						icon={<FiPackage />}
+						title="Đăng sản phẩm mới"
+						description="Điền thông tin để bán sản phẩm của bạn"
 					/>
+				</div>
 
-					<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-						{/* Price */}
-						<motion.div variants={itemVariants}>
-							<Input
-								label="Giá bán (VNĐ)"
-								name="price"
-								value={formatPrice(formData.price)}
-								onChange={handlePriceChange}
-								placeholder="VD: 15.000.000"
-								type="text"
-								icon={<FiDollarSign />}
-								error={errors.price?.[0]}
-								theme="light"
-								size="sm"
-							/>
-						</motion.div>
+				{/* Two Column Layout - Tỷ lệ 3:2 thay vì 1:1 */}
+				<div className="grid grid-cols-1 lg:grid-cols-6 gap-8">
+					{/* Left Column - Form (3/5) */}
+					<div className="lg:col-span-4">
+						<motion.form
+							variants={containerVariants}
+							initial="hidden"
+							animate="visible"
+							onSubmit={handleSubmit}
+							className="bg-white rounded-2xl shadow-xl p-6 md:p-8 space-y-6"
+						>
+							{/* Title */}
+							<motion.div variants={itemVariants}>
+								<Input
+									label="Tiêu đề tin đăng"
+									name="title"
+									value={formData.title}
+									onChange={handleInputChange}
+									placeholder="VD: iPhone 13 Pro Max 256GB"
+									type="text"
+									icon={<FiPackage />}
+									error={errors.title?.[0]}
+									theme="light"
+									size="sm"
+								/>
+							</motion.div>
 
-						{/* Category */}
-						<motion.div variants={itemVariants}>
-							<Dropdown
-								label="Chọn danh mục"
-								items={categoryItems}
-								value={formData.category_id}
-								onChange={(value) => {
-									setFormData((prev) => ({
-										...prev,
-										category_id: String(value),
-									}));
-									if (errors.category_id) {
-										setErrors((prev) => {
-											const newErrors = { ...prev };
-											delete newErrors.category_id;
-											return newErrors;
-										});
-									}
-								}}
-								placeholder="Chọn danh mục"
-								icon={<FiFileText />}
-								fullWidth
-								searchable
-								size="md"
-							/>
-							<AnimatePresence>
-								{errors.category_id && (
-									<motion.div
-										initial={{ opacity: 0, y: -10 }}
-										animate={{ opacity: 1, y: 0 }}
-										exit={{ opacity: 0, y: -10 }}
-										className="flex items-start gap-2 text-red-600 text-xs bg-red-50 border border-red-200 rounded-lg p-2.5 mt-2"
-									>
-										<FiAlertCircle className="flex-shrink-0 mt-0.5 text-xs" />
-										<span className="leading-relaxed">
-											{errors.category_id[0]}
-										</span>
-									</motion.div>
-								)}
-							</AnimatePresence>
-						</motion.div>
-					</div>
+							{/* Description */}
+							<motion.div variants={itemVariants}>
+								<Input
+									label="Mô tả sản phẩm"
+									name="description"
+									as="textarea"
+									rows={5}
+									icon={<FiFileText />}
+									value={formData.description}
+									onChange={handleInputChange}
+									placeholder="Mô tả chi tiết về sản phẩm: tình trạng, xuất xứ, thời gian sử dụng..."
+									error={errors.description?.[0]}
+									theme="light"
+									size="sm"
+								/>
+							</motion.div>
 
-					{/* Condition */}
-					<motion.div variants={itemVariants}>
-						<label className="block text-sm font-semibold text-gray-700 mb-3">
-							Tình trạng sản phẩm
-						</label>
-						<div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-							{CONDITION_OPTIONS.map((option, index) => (
-								<motion.button
-									key={option.value}
-									type="button"
-									initial={{ opacity: 0, scale: 0.8 }}
-									animate={{ opacity: 1, scale: 1 }}
-									transition={{ delay: index * 0.1 }}
-									whileHover={{ scale: 1.05 }}
-									whileTap={{ scale: 0.95 }}
-									onClick={() =>
-										setFormData((prev) => ({
-											...prev,
-											condition: option.value,
-										}))
-									}
-									className={`p-4 rounded-xl border-2 transition-all duration-200 cursor-pointer ${
-										formData.condition === option.value
-											? 'border-emerald-500 bg-emerald-50 shadow-md'
-											: 'border-gray-200 bg-white hover:border-emerald-300'
-									}`}
-								>
-									<motion.div
-										animate={{
-											scale:
+							<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+								{/* Price */}
+								<motion.div variants={itemVariants}>
+									<Input
+										label="Giá bán (VNĐ)"
+										name="price"
+										value={formatPrice(formData.price)}
+										onChange={handlePriceChange}
+										placeholder="VD: 15.000.000"
+										type="text"
+										icon={<FiDollarSign />}
+										error={errors.price?.[0]}
+										theme="light"
+										size="sm"
+									/>
+								</motion.div>
+
+								{/* Category */}
+								<motion.div variants={itemVariants}>
+									<Dropdown
+										label="Chọn danh mục"
+										items={categoryItems}
+										value={formData.category_id}
+										onChange={(value) => {
+											setFormData((prev) => ({
+												...prev,
+												category_id: String(value),
+											}));
+											if (errors.category_id) {
+												setErrors((prev) => {
+													const newErrors = {
+														...prev,
+													};
+													delete newErrors.category_id;
+													return newErrors;
+												});
+											}
+										}}
+										placeholder="Chọn danh mục"
+										icon={<FiFileText />}
+										fullWidth
+										size="md"
+									/>
+									<AnimatePresence>
+										{errors.category_id && (
+											<motion.div
+												initial={{ opacity: 0, y: -10 }}
+												animate={{ opacity: 1, y: 0 }}
+												exit={{ opacity: 0, y: -10 }}
+												className="flex items-start gap-2 text-red-600 text-xs bg-red-50 border border-red-200 rounded-lg p-2.5 mt-2"
+											>
+												<FiAlertCircle className="flex-shrink-0 mt-0.5 text-xs" />
+												<span className="leading-relaxed">
+													{errors.category_id[0]}
+												</span>
+											</motion.div>
+										)}
+									</AnimatePresence>
+								</motion.div>
+							</div>
+
+							{/* Condition */}
+							<motion.div variants={itemVariants}>
+								<label className="block text-sm font-semibold text-gray-700 mb-3">
+									Tình trạng sản phẩm
+								</label>
+								<div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+									{CONDITION_OPTIONS.map((option, index) => (
+										<motion.button
+											key={option.value}
+											type="button"
+											initial={{ opacity: 0, scale: 0.8 }}
+											animate={{ opacity: 1, scale: 1 }}
+											transition={{ delay: index * 0.1 }}
+											whileHover={{ scale: 1.05 }}
+											whileTap={{ scale: 0.95 }}
+											onClick={() =>
+												setFormData((prev) => ({
+													...prev,
+													condition: option.value,
+												}))
+											}
+											className={`p-4 rounded-xl border-2 transition-all duration-200 cursor-pointer ${
 												formData.condition ===
 												option.value
-													? [1, 1.2, 1]
-													: 1,
+													? 'border-emerald-500 bg-emerald-50 shadow-md'
+													: 'border-gray-200 bg-white hover:border-emerald-300'
+											}`}
+										>
+											<motion.div
+												animate={{
+													scale:
+														formData.condition ===
+														option.value
+															? [1, 1.2, 1]
+															: 1,
+												}}
+												transition={{ duration: 0.3 }}
+												className="text-2xl mb-1"
+											>
+												{option.icon}
+											</motion.div>
+											<div className="text-sm font-semibold text-gray-800">
+												{option.label}
+											</div>
+										</motion.button>
+									))}
+								</div>
+							</motion.div>
+
+							{/* Address */}
+							<motion.div variants={itemVariants}>
+								<label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-3">
+									<FiMapPin className="w-4 h-4 text-emerald-600" />
+									Vị trí sản phẩm
+								</label>
+								<div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
+									<LocationSelector
+										key={locationKey}
+										addressData={formData.address}
+										onChange={(value) => {
+											setFormData((prev) => ({
+												...prev,
+												address: value,
+											}));
+											if (errors.address) {
+												setErrors((prev) => {
+													const newErrors = {
+														...prev,
+													};
+													delete newErrors.address;
+													return newErrors;
+												});
+											}
 										}}
-										transition={{ duration: 0.3 }}
-										className="text-2xl mb-1"
-									>
-										{option.icon}
-									</motion.div>
-									<div className="text-sm font-semibold text-gray-800">
-										{option.label}
-									</div>
-								</motion.button>
-							))}
-						</div>
-					</motion.div>
+										isEditing={true}
+										showLabel={true}
+									/>
+								</div>
+								<AnimatePresence>
+									{errors.address && (
+										<motion.div
+											initial={{ opacity: 0, y: -10 }}
+											animate={{ opacity: 1, y: 0 }}
+											exit={{ opacity: 0, y: -10 }}
+											className="flex items-start gap-2 text-red-600 text-xs bg-red-50 border border-red-200 rounded-lg p-2.5 mt-2"
+										>
+											<FiAlertCircle className="flex-shrink-0 mt-0.5 text-xs" />
+											<span className="leading-relaxed">
+												{errors.address[0]}
+											</span>
+										</motion.div>
+									)}
+								</AnimatePresence>
+							</motion.div>
 
-					{/* Address */}
-					<motion.div variants={itemVariants}>
-						<label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-3">
-							<FiMapPin className="w-4 h-4 text-emerald-600" />
-							Vị trí sản phẩm
-						</label>
-						<div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
-							<LocationSelector
-								addressData={formData.address}
-								onChange={(value) => {
-									setFormData((prev) => ({
-										...prev,
-										address: value,
-									}));
-									console.log(value);
-								}}
-								isEditing={true}
-								showLabel={true}
-							/>
-						</div>
-						<AnimatePresence>
-							{errors.address && (
-								<motion.div
-									initial={{ opacity: 0, y: -10 }}
-									animate={{ opacity: 1, y: 0 }}
-									exit={{ opacity: 0, y: -10 }}
-									className="flex items-start gap-2 text-red-600 text-xs bg-red-50 border border-red-200 rounded-lg p-2.5 mt-2"
-								>
-									<FiAlertCircle className="flex-shrink-0 mt-0.5 text-xs" />
-									<span className="leading-relaxed">
-										{errors.address[0]}
-									</span>
-								</motion.div>
-							)}
-						</AnimatePresence>
-					</motion.div>
-
-					{/* Images Upload */}
-					<motion.div variants={itemVariants}>
-						<ImageUpload
-							images={formData.images}
-							onChange={(newImages) => {
-								setFormData((prev) => ({
-									...prev,
-									images: newImages,
-								}));
-								// Xóa lỗi images nếu có
-								if (errors.images) {
-									setErrors((prev) => {
-										const newErrors = { ...prev };
-										delete newErrors.images;
-										return newErrors;
-									});
-								}
-							}}
-							error={errors.images?.[0]}
-							maxImages={5}
-							maxSizeInMB={10}
-						/>
-					</motion.div>
-
-					{/* Submit Button */}
-
-					<GradientButton
-						type="submit"
-						isLoading={isSubmitting}
-						loadingText="Đang đăng..."
-						size="sm"
-						variant="primary"
-						icon={
-							isSubmitting ? (
-								<motion.div
-									animate={{ rotate: 360 }}
-									transition={{
-										duration: 1,
-										repeat: Infinity,
-										ease: 'linear',
+							{/* Images Upload */}
+							<motion.div variants={itemVariants}>
+								<ImageUpload
+									images={formData.images}
+									previews={imagePreviews}
+									onChange={(newImages) => {
+										setFormData((prev) => ({
+											...prev,
+											images: newImages,
+										}));
+										// Xóa lỗi images nếu có
+										if (errors.images) {
+											setErrors((prev) => {
+												const newErrors = { ...prev };
+												delete newErrors.images;
+												return newErrors;
+											});
+										}
 									}}
-									className="w-4 h-4 border-2 border-white border-t-transparent rounded-full"
+									onPreviewsChange={setImagePreviews}
+									error={errors.images?.[0]}
+									maxImages={5}
+									maxSizeInMB={10}
 								/>
-							) : (
-								<FiCheck />
-							)
-						}
-					>
-						Đăng sản phẩm
-					</GradientButton>
-				</motion.form>
+							</motion.div>
+
+							{/* Submit Button */}
+							<motion.div variants={itemVariants}>
+								<GradientButton
+									type="submit"
+									isLoading={isSubmitting}
+									loadingText="Đang đăng..."
+									size="sm"
+									variant="primary"
+									icon={<FiCheck />}
+								>
+									Đăng sản phẩm
+								</GradientButton>
+							</motion.div>
+						</motion.form>
+					</div>
+
+					{/* Right Column - Preview (2/5) */}
+					<div className="lg:block lg:col-span-2">
+						<ProductPreviewDemo
+							title={formData.title}
+							description={formData.description}
+							price={formData.price}
+							condition={formData.condition}
+							images={imagePreviews}
+							address={formData.address}
+							categoryName={selectedCategory?.label}
+						/>
+					</div>
+				</div>
 
 				{/* Success Animation Area */}
 				<LoadingOverlay
 					isVisible={isSubmitting}
-					message="Đang tải..."
+					message="Đang đăng..."
 				/>
 			</div>
 		</div>

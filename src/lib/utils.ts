@@ -47,6 +47,7 @@ export const handleApiError = <T extends Record<string, string[]>>(
 	}
 
 	// Hiển thị toast cho general error
+	console.log('Lỗi từ handleApiError: ', apiError);
 	toast.error(apiError.message);
 	return undefined;
 };

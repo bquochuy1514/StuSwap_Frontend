@@ -89,7 +89,6 @@ export default function ChangePasswordTab() {
 			if (fieldErrors) {
 				setErrors(fieldErrors);
 			}
-			console.error('Error changing password:', error);
 		} finally {
 			setIsSubmitting(false);
 		}
@@ -203,13 +202,7 @@ export default function ChangePasswordTab() {
 					loadingText="Đang xử lý..."
 					size="sm"
 					variant="primary"
-					icon={
-						isSubmitting ? (
-							<div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-						) : (
-							<FiLock />
-						)
-					}
+					icon={<FiLock />}
 				>
 					Đổi mật khẩu
 				</GradientButton>

@@ -1,12 +1,20 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiImage, FiUpload, FiX, FiAlertCircle } from 'react-icons/fi';
 import { MdDragIndicator } from 'react-icons/md';
 import { toast } from 'react-toastify';
 
+export interface PreviewItem {
+	id: string;
+	file: File;
+	url: string;
+}
+
 interface ImageUploadProps {
 	images: File[];
+	previews: PreviewItem[];
 	onChange: (images: File[]) => void;
+	onPreviewsChange: (previews: PreviewItem[]) => void;
 	maxImages?: number;
 	maxSizeInMB?: number;
 	acceptedFormats?: string[];
@@ -15,15 +23,11 @@ interface ImageUploadProps {
 	showLabel?: boolean;
 }
 
-interface PreviewItem {
-	id: string;
-	file: File;
-	url: string;
-}
-
 const ImageUpload: React.FC<ImageUploadProps> = ({
 	images,
+	previews,
 	onChange,
+	onPreviewsChange,
 	maxImages = 5,
 	maxSizeInMB = 10,
 	acceptedFormats = ['jpg', 'jpeg', 'png', 'webp'],
@@ -31,8 +35,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 	label = 'Hình ảnh sản phẩm',
 	showLabel = true,
 }) => {
-	const [previews, setPreviews] = useState<PreviewItem[]>([]);
-	const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+	const [draggedIndex, setDraggedIndex] = React.useState<number | null>(null);
 
 	const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
 		const files = Array.from(e.target.files || []);
@@ -77,18 +80,22 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 			});
 		}
 
-		setPreviews((prev) => [...prev, ...newPreviews]);
+		onPreviewsChange([...previews, ...newPreviews]);
 		onChange([...images, ...validFiles]);
 		e.target.value = '';
 	};
 
 	const handleRemove = (index: number) => {
-		URL.revokeObjectURL(previews[index].url);
+		// Revoke URL trước khi xóa
+		const previewToRemove = previews[index];
+		if (previewToRemove?.url) {
+			URL.revokeObjectURL(previewToRemove.url);
+		}
 
 		const newPreviews = previews.filter((_, i) => i !== index);
 		const newFiles = images.filter((_, i) => i !== index);
 
-		setPreviews(newPreviews);
+		onPreviewsChange(newPreviews);
 		onChange(newFiles);
 	};
 
@@ -103,16 +110,15 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 
 		if (draggedIndex === null || draggedIndex === index) return;
 
-		// Reorder immediately for smooth experience
+		// Chỉ reorder, KHÔNG tạo mới objects
 		const newPreviews = [...previews];
-		const draggedItem = newPreviews[draggedIndex];
-
-		newPreviews.splice(draggedIndex, 1);
+		const [draggedItem] = newPreviews.splice(draggedIndex, 1);
 		newPreviews.splice(index, 0, draggedItem);
 
-		setPreviews(newPreviews);
-
+		// Giữ nguyên files theo thứ tự mới
 		const newFiles = newPreviews.map((p) => p.file);
+
+		onPreviewsChange(newPreviews);
 		onChange(newFiles);
 
 		setDraggedIndex(index);
@@ -293,7 +299,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 								/>
 							</svg>
 							<p className="text-xs text-blue-700 leading-relaxed">
-								💡 <span className="font-semibold">Mẹo:</span>{' '}
+								<span className="font-semibold">Lưu ý:</span>{' '}
 								Ảnh đầu tiên sẽ là ảnh đại diện. Kéo thả ảnh để
 								thay đổi thứ tự.
 							</p>

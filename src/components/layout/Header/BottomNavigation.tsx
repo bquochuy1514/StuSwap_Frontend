@@ -65,7 +65,7 @@ export default function BottomNavigation() {
 		<>
 			{/* Banner đăng nhập - đè lên bottom navigation */}
 			{!accessToken && showLoginBanner && (
-				<div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg lg:hidden">
+				<div className="fixed bottom-0 left-0 right-0 bg-linear-to-br from-gray-50 via-emerald-50/30 to-teal-50/40 border-t border-gray-200 shadow-lg lg:hidden z-999">
 					<div className="px-4 py-3 relative">
 						{/* Close button */}
 						<button
@@ -74,7 +74,7 @@ export default function BottomNavigation() {
 						>
 							<IoClose className="w-5 h-5 text-gray-700" />
 						</button>
-						<div className="flex items-center gap-2 pr-6">
+						<div className="flex items-center gap-2 pr-6 mb-2">
 							<MdPerson className="w-10 h-10 text-gray-900 flex-shrink-0" />
 							<p className="text-sm text-gray-900 font-semibold">
 								Đăng nhập để đăng bán và xem sản phẩm chất lượng

@@ -33,7 +33,7 @@ export default function ProfilePage() {
 			initial={{ opacity: 0, y: 8 }}
 			animate={{ opacity: 1, y: 0 }}
 			transition={{ duration: 0.35 }}
-			className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 p-4 sm:p-6"
+			className="min-h-screen bg-linear-to-br from-gray-50 via-emerald-50/30 to-teal-50/40 p-4 sm:p-6"
 		>
 			<div className="max-w-6xl mx-auto">
 				<div className="flex flex-col lg:flex-row gap-6">

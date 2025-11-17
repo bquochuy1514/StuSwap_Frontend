@@ -153,7 +153,7 @@ export default function ContactPage() {
 									'Nest.js (Backend)',
 									'MySQL (Database)',
 									'TypeScript (Language)',
-									'Tailwind CSS (Styling)',
+									'TailwindCSS (Styling)',
 									'Node.js (Runtime)',
 								].map((tech) => (
 									<span
@@ -207,10 +207,9 @@ export default function ContactPage() {
 				<p className="text-sm text-amber-800 flex items-start gap-2">
 					<span className="text-lg">💡</span>
 					<span>
-						<strong>Lưu ý:</strong> Đây là dự án học tập và không
-						mang tính chất thương mại. Mọi giao dịch diễn ra hoàn
-						toàn giữa người mua và người bán. Mình chỉ đóng vai trò
-						cung cấp nền tảng kết nối.
+						Nếu bạn gặp sự cố khi sử dụng nền tảng hoặc cần góp ý để
+						cải thiện trải nghiệm, hãy liên hệ với mình. Mình luôn
+						cố gắng phản hồi sớm nhất có thể để hỗ trợ bạn tốt nhất.
 					</span>
 				</p>
 			</div>

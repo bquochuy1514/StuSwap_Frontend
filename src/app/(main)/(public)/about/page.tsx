@@ -51,7 +51,7 @@ export default function AboutPage() {
 		{ name: 'Nest.js', category: 'Backend' },
 		{ name: 'MySQL', category: 'Database' },
 		{ name: 'TypeScript', category: 'Language' },
-		{ name: 'Tailwind CSS', category: 'Styling' },
+		{ name: 'TailwindCSS', category: 'Styling' },
 		{ name: 'Node.js', category: 'Runtime' },
 	];
 
@@ -251,9 +251,11 @@ export default function AboutPage() {
 							tảng để kết nối các bạn sinh viên với nhau.
 						</p>
 						<p>
-							Dự án này được tạo ra với mục đích học tập, rèn
-							luyện kỹ năng lập trình và đóng góp cho cộng đồng
-							sinh viên. Không có bất kỳ mục đích thương mại nào.
+							Dự án này được xây dựng như một nền tảng học tập và
+							hỗ trợ cộng đồng sinh viên. Một số tính năng nâng
+							cao có thể yêu cầu phí duy trì hệ thống, nhưng mình
+							không vận hành như một sàn thương mại điện tử doanh
+							nghiệp.
 						</p>
 						<div className="pt-3 border-t border-amber-200">
 							<p className="text-amber-800 font-medium">
