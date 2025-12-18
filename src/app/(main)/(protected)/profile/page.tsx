@@ -4,14 +4,15 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiUser, FiLock, FiShield, FiLogOut } from 'react-icons/fi';
+import { FiUser, FiLock, FiShield, FiLogOut, FiAward } from 'react-icons/fi';
 import ProfileInfoTab from '@/components/features/users/profile/ProfileInfoTab';
 import ChangePasswordTab from '@/components/features/users/profile/ChangePasswordTab';
 import AvatarUpload from '@/components/features/users/profile/AvatarUpload';
 import { useAuth } from '@/contexts/AuthContext';
 import ActiveButton from '@/components/ui/ActiveButton';
+import MembershipTab from '@/components/features/users/profile/MembershipTab';
 
-type TabType = 'info' | 'password' | 'security';
+type TabType = 'info' | 'password' | 'membership';
 
 export default function ProfilePage() {
 	const { user, setUser, logout } = useAuth();
@@ -111,15 +112,15 @@ export default function ProfilePage() {
 							</ActiveButton>
 
 							<ActiveButton
-								icon={<FiShield />}
-								isActive={activeTab === 'security'}
+								icon={<FiAward />}
+								isActive={activeTab === 'membership'}
 								onClick={() => {
-									setActiveTab('security');
+									setActiveTab('membership');
 									setIsEditing(false);
 								}}
 								size="sm"
 							>
-								Bảo mật
+								Gói thành viên
 							</ActiveButton>
 						</motion.div>
 					</div>
@@ -138,35 +139,7 @@ export default function ProfilePage() {
 
 							{activeTab === 'password' && <ChangePasswordTab />}
 
-							{activeTab === 'security' && (
-								<motion.div
-									key="security"
-									initial={{ opacity: 0, x: 20 }}
-									animate={{ opacity: 1, x: 0 }}
-									exit={{ opacity: 0, x: -20 }}
-									transition={{ duration: 0.2 }}
-									className="bg-white shadow-lg rounded-2xl p-6"
-								>
-									<div className="flex items-start gap-3 mb-6">
-										<div className="p-2.5 bg-emerald-100 rounded-xl">
-											<FiShield className="w-5 h-5 text-emerald-600" />
-										</div>
-										<div className="flex-1">
-											<h2 className="text-2xl font-bold text-gray-900 mb-1">
-												Bảo mật
-											</h2>
-											<p className="text-sm text-gray-500">
-												Tính năng đang được phát triển
-											</p>
-										</div>
-									</div>
-									<div className="text-center py-12">
-										<p className="text-gray-400">
-											Đang cập nhật...
-										</p>
-									</div>
-								</motion.div>
-							)}
+							{activeTab === 'membership' && <MembershipTab />}
 						</AnimatePresence>
 					</div>
 				</div>

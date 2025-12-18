@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { FiMail, FiLock, FiUser } from 'react-icons/fi';
-import { toast } from 'react-toastify';
+import { toast } from '@/components/ui/Toast';
 import { useRedirect } from '@/hooks/useRedirect';
 import GradientButton from '@/components/ui/GradientButton';
 import RedirectLoading from '@/components/shared/PageTransition';

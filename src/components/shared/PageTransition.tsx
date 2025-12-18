@@ -65,7 +65,7 @@ export default function RedirectLoading({ message = 'Đang chuyển hướng...'
 				{/* Brand name */}
 				<h2 className="text-2xl font-bold mb-4">
 					<span className="bg-gradient-to-r from-emerald-300 to-blue-300 bg-clip-text text-transparent">
-						Student Swap
+						StudentSwap
 					</span>
 				</h2>
 

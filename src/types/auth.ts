@@ -158,7 +158,7 @@ export type ForgotPasswordRequest = {
 };
 
 export type ForgotPasswordError = {
-	message: string;
+	email?: string[];
 };
 
 export type VerifyOtpRequest = {

@@ -8,7 +8,7 @@ import {
 	ReactNode,
 } from 'react';
 import { useRouter } from 'next/navigation';
-import { toast } from 'react-toastify';
+import { toast } from '@/components/ui/Toast';
 import api from '@/lib/api/axiosInstance';
 import { fetchUserProfile } from '@/lib/api/userApi';
 import { loginUser, logoutUser } from '@/lib/api/authApi';

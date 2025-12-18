@@ -19,7 +19,7 @@ import CompactButton from '@/components/ui/CompactButton';
 import Input from '@/components/ui/Input';
 import LocationSelector from '@/components/ui/LocationSelector';
 import { updateUserProfile } from '@/lib/api/userApi';
-import { toast } from 'react-toastify';
+import { toast } from '@/components/ui/Toast';
 import { handleApiError } from '@/lib/utils';
 import { UpdateUserProfilePayload } from '@/types/user';
 import LoadingOverlay from '@/components/ui/LoadingOverlay';

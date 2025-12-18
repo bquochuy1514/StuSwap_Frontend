@@ -5,7 +5,7 @@ import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { usePathname, useRouter } from 'next/navigation';
-import { MdAddCircleOutline, MdMenu, MdClose } from 'react-icons/md';
+import { MdMenu, MdClose, MdOutlinePostAdd } from 'react-icons/md';
 import { FaUserCircle } from 'react-icons/fa';
 import Logo from '@/components/ui/Logo';
 import CompactButton from '@/components/ui/CompactButton';
@@ -85,15 +85,14 @@ export default function Header() {
 						<div className="flex items-center gap-3">
 							{accessToken ? (
 								<>
-									{/* Nút đăng tin – luôn hiện trên mobile & desktop */}
+									{/* Post button (chỉ desktop) */}
 									<CompactButton
 										variant="primary"
-										size="md"
 										onClick={() => router.push('/post')}
 										icon={
-											<MdAddCircleOutline className="w-5 h-5" />
+											<MdOutlinePostAdd className="w-7 h-7" />
 										}
-										className="hidden sm:flex"
+										className="hidden sm:flex gap-1"
 									>
 										Đăng bán
 									</CompactButton>
@@ -161,11 +160,11 @@ export default function Header() {
 
 									<CompactButton
 										variant="primary"
-										size="md"
 										onClick={() => router.push('/post')}
 										icon={
-											<MdAddCircleOutline className="w-5 h-5" />
+											<MdOutlinePostAdd className="w-7 h-7" />
 										}
+										className="hidden sm:flex gap-1"
 									>
 										Đăng bán
 									</CompactButton>

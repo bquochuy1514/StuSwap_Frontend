@@ -1,7 +1,7 @@
 'use client';
 import { FcGoogle } from 'react-icons/fc';
 import { BsGithub } from 'react-icons/bs';
-import { toast } from 'react-toastify';
+import { toast } from '@/components/ui/Toast';
 import { useRedirect } from '@/hooks/useRedirect';
 import RedirectLoading from '../shared/PageTransition';
 

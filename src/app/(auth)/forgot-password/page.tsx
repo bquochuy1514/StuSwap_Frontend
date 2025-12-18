@@ -3,7 +3,7 @@
 
 import { useState } from 'react';
 import { FiMail } from 'react-icons/fi';
-import { toast } from 'react-toastify';
+import { toast } from '@/components/ui/Toast';
 import AuthHeader from '@/components/auth/AuthHeader';
 import Link from 'next/link';
 import BackButton from '@/components/ui/BackButton';
@@ -14,14 +14,17 @@ import Input from '@/components/ui/Input';
 import GradientButton from '@/components/ui/GradientButton';
 import { forgotPassword } from '@/lib/api/authApi';
 import { handleApiError } from '@/lib/utils';
+import { ForgotPasswordError } from '@/types/auth';
 
 export default function ForgotPasswordPage() {
 	const [email, setEmail] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
-	const [errors, setErrors] = useState({});
+	const [errors, setErrors] = useState<ForgotPasswordError>({});
 	const { isRedirecting, redirectTo } = useRedirect();
 
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+	const handleChange = (
+		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+	) => {
 		setEmail(e.target.value);
 		setErrors({});
 	};
@@ -31,7 +34,7 @@ export default function ForgotPasswordPage() {
 		setIsLoading(true);
 
 		if (!email) {
-			toast.warn('Vui lòng nhập email');
+			toast.warning('Vui lòng nhập email');
 			setIsLoading(false);
 			return;
 		}
@@ -43,7 +46,6 @@ export default function ForgotPasswordPage() {
 
 			redirectTo(`forgot-password/verify-otp?email=${email}`);
 		} catch (error) {
-			console.log('API response error: ', error);
 			const fieldErrors = handleApiError(error);
 			if (fieldErrors) {
 				setErrors(fieldErrors);
@@ -102,7 +104,9 @@ export default function ForgotPasswordPage() {
 								onChange={handleChange}
 								placeholder="example@email.com"
 								icon={<FiMail />}
-								// error={errors.email ? errors.email[0] : null}
+								error={
+									errors.email ? errors.email[0] : undefined
+								}
 								theme="dark"
 							/>
 
@@ -113,6 +117,7 @@ export default function ForgotPasswordPage() {
 								loadingText="Đang gửi..."
 								size="md"
 								variant="primary"
+								className="mt-4"
 							>
 								Gửi email khôi phục
 							</GradientButton>

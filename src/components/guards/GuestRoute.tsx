@@ -13,7 +13,6 @@ export default function GuestRoute({
 	const router = useRouter();
 
 	useEffect(() => {
-		console.log('Đang ở trang guestRoute');
 		if (!loading && user) {
 			router.push('/');
 		}

@@ -15,18 +15,27 @@ interface LocationSelectorProps {
 }
 
 interface Province {
-	code: number;
-	name: string;
+	province_id: string;
+	province_name: string;
+	province_type: string;
 }
 
 interface District {
-	code: number;
-	name: string;
+	district_id: string;
+	district_name: string;
+	district_type: string;
+	province_id: string;
 }
 
 interface Ward {
-	code: number;
-	name: string;
+	ward_id: string;
+	ward_name: string;
+	ward_type: string;
+	district_id: string;
+}
+
+interface ApiResponse<T> {
+	results: T[];
 }
 
 export default function LocationSelector({
@@ -52,8 +61,8 @@ export default function LocationSelector({
 
 	// Cache để tránh fetch lại
 	const provincesCache = useRef<Province[] | null>(null);
-	const districtsCache = useRef<Record<number, District[]>>({});
-	const wardsCache = useRef<Record<number, Ward[]>>({});
+	const districtsCache = useRef<Record<string, District[]>>({});
+	const wardsCache = useRef<Record<string, Ward[]>>({});
 
 	// Fetch provinces on mount
 	useEffect(() => {
@@ -69,11 +78,11 @@ export default function LocationSelector({
 		try {
 			setLoading(true);
 			const response = await fetch(
-				'https://provinces.open-api.vn/api/p/'
+				'https://api.vnappmob.com/api/v2/province/'
 			);
-			const data = await response.json();
-			provincesCache.current = data;
-			setProvinces(data);
+			const data: ApiResponse<Province> = await response.json();
+			provincesCache.current = data.results;
+			setProvinces(data.results);
 		} catch (error) {
 			console.error('❌ Error fetching provinces:', error);
 		} finally {
@@ -81,18 +90,18 @@ export default function LocationSelector({
 		}
 	};
 
-	const fetchDistricts = async (provinceCode: number) => {
-		if (districtsCache.current[provinceCode]) {
-			return districtsCache.current[provinceCode];
+	const fetchDistricts = async (provinceId: string) => {
+		if (districtsCache.current[provinceId]) {
+			return districtsCache.current[provinceId];
 		}
 
 		try {
 			const response = await fetch(
-				`https://provinces.open-api.vn/api/p/${provinceCode}?depth=2`
+				`https://api.vnappmob.com/api/v2/province/district/${provinceId}`
 			);
-			const data = await response.json();
-			const districtsList: District[] = data.districts || [];
-			districtsCache.current[provinceCode] = districtsList;
+			const data: ApiResponse<District> = await response.json();
+			const districtsList: District[] = data.results || [];
+			districtsCache.current[provinceId] = districtsList;
 			return districtsList;
 		} catch (error) {
 			console.error('❌ Error fetching districts:', error);
@@ -100,18 +109,18 @@ export default function LocationSelector({
 		}
 	};
 
-	const fetchWards = async (districtCode: number) => {
-		if (wardsCache.current[districtCode]) {
-			return wardsCache.current[districtCode];
+	const fetchWards = async (districtId: string) => {
+		if (wardsCache.current[districtId]) {
+			return wardsCache.current[districtId];
 		}
 
 		try {
 			const response = await fetch(
-				`https://provinces.open-api.vn/api/d/${districtCode}?depth=2`
+				`https://api.vnappmob.com/api/v2/province/ward/${districtId}`
 			);
-			const data = await response.json();
-			const wardsList: Ward[] = data.wards || [];
-			wardsCache.current[districtCode] = wardsList;
+			const data: ApiResponse<Ward> = await response.json();
+			const wardsList: Ward[] = data.results || [];
+			wardsCache.current[districtId] = wardsList;
 			return wardsList;
 		} catch (error) {
 			console.error('❌ Error fetching wards:', error);
@@ -147,37 +156,39 @@ export default function LocationSelector({
 
 				if (province) {
 					const foundProvince = provinces.find(
-						(p) => p.name === province
+						(p) => p.province_name === province
 					);
 
 					if (foundProvince) {
-						setSelectedProvince(foundProvince.name);
+						setSelectedProvince(foundProvince.province_name);
 
 						if (district) {
 							const districtsList = await fetchDistricts(
-								foundProvince.code
+								foundProvince.province_id
 							);
 							setDistricts(districtsList);
 
 							const foundDistrict = districtsList.find(
-								(d) => d.name === district
+								(d) => d.district_name === district
 							);
 
 							if (foundDistrict) {
-								setSelectedDistrict(foundDistrict.name);
+								setSelectedDistrict(
+									foundDistrict.district_name
+								);
 
 								if (ward) {
 									const wardsList = await fetchWards(
-										foundDistrict.code
+										foundDistrict.district_id
 									);
 									setWards(wardsList);
 
 									const foundWard = wardsList.find(
-										(w) => w.name === ward
+										(w) => w.ward_name === ward
 									);
 
 									if (foundWard) {
-										setSelectedWard(foundWard.name);
+										setSelectedWard(foundWard.ward_name);
 									}
 								}
 							}
@@ -205,10 +216,14 @@ export default function LocationSelector({
 		setWards([]);
 
 		if (provinceName) {
-			const province = provinces.find((p) => p.name === provinceName);
+			const province = provinces.find(
+				(p) => p.province_name === provinceName
+			);
 			if (province) {
 				setLoading(true);
-				const districtsList = await fetchDistricts(province.code);
+				const districtsList = await fetchDistricts(
+					province.province_id
+				);
 				setDistricts(districtsList);
 				setLoading(false);
 			}
@@ -224,10 +239,12 @@ export default function LocationSelector({
 		setSelectedWard('');
 
 		if (districtName) {
-			const district = districts.find((d) => d.name === districtName);
+			const district = districts.find(
+				(d) => d.district_name === districtName
+			);
 			if (district) {
 				setLoading(true);
-				const wardsList = await fetchWards(district.code);
+				const wardsList = await fetchWards(district.district_id);
 				setWards(wardsList);
 				setLoading(false);
 			}
@@ -300,21 +317,21 @@ export default function LocationSelector({
 
 	// Convert to Dropdown items format
 	const provinceItems = provinces.map((p) => ({
-		id: p.code,
-		label: p.name,
-		value: p.name, // Sử dụng name làm value để dễ so sánh
+		id: p.province_id,
+		label: p.province_name,
+		value: p.province_name, // Sử dụng name làm value để dễ so sánh
 	}));
 
 	const districtItems = districts.map((d) => ({
-		id: d.code,
-		label: d.name,
-		value: d.name,
+		id: d.district_id,
+		label: d.district_name,
+		value: d.district_name,
 	}));
 
 	const wardItems = wards.map((w) => ({
-		id: w.code,
-		label: w.name,
-		value: w.name,
+		id: w.ward_id,
+		label: w.ward_name,
+		value: w.ward_name,
 	}));
 
 	return (

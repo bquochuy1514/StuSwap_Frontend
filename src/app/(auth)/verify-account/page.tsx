@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
+import { toast } from '@/components/ui/Toast';
 import { useSearchParams } from 'next/navigation';
 import { resendCode, verifyAccount } from '@/lib/api/authApi';
 import RedirectLoading from '@/components/shared/PageTransition';

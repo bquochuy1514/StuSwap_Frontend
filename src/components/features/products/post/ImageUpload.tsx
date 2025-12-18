@@ -2,7 +2,26 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiImage, FiUpload, FiX, FiAlertCircle } from 'react-icons/fi';
 import { MdDragIndicator } from 'react-icons/md';
-import { toast } from 'react-toastify';
+import { toast } from '@/components/ui/Toast';
+import {
+	DndContext,
+	closestCenter,
+	KeyboardSensor,
+	PointerSensor,
+	useSensor,
+	useSensors,
+	DragEndEvent,
+	DragStartEvent,
+	DragOverlay,
+} from '@dnd-kit/core';
+import {
+	arrayMove,
+	SortableContext,
+	sortableKeyboardCoordinates,
+	useSortable,
+	rectSortingStrategy,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 export interface PreviewItem {
 	id: string;
@@ -23,6 +42,90 @@ interface ImageUploadProps {
 	showLabel?: boolean;
 }
 
+// Sortable Image Item Component
+interface SortableImageProps {
+	item: PreviewItem;
+	index: number;
+	onRemove: (index: number) => void;
+}
+
+const SortableImage: React.FC<SortableImageProps> = ({
+	item,
+	index,
+	onRemove,
+}) => {
+	const {
+		attributes,
+		listeners,
+		setNodeRef,
+		transform,
+		transition,
+		isDragging,
+	} = useSortable({ id: item.id });
+
+	const style = {
+		transform: CSS.Transform.toString(transform),
+		transition,
+		opacity: isDragging ? 0.5 : 1,
+	};
+
+	return (
+		<div
+			ref={setNodeRef}
+			style={style}
+			{...attributes}
+			{...listeners}
+			className="relative group cursor-move transition-all duration-200 aspect-square"
+		>
+			{/* Image Container */}
+			<div className="relative w-full h-full overflow-hidden rounded-2xl border-2 bg-white border-gray-200 group-hover:border-emerald-400 shadow-md group-hover:shadow-lg transition-all duration-200">
+				<img
+					src={item.url}
+					alt={`Preview ${index + 1}`}
+					className="w-full h-full object-cover pointer-events-none select-none"
+					draggable={false}
+				/>
+
+				{/* Overlay */}
+				<div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+
+				{/* Image number */}
+				<div className="absolute bottom-2 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded-md font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+					#{index + 1}
+				</div>
+
+				{/* Drag Handle - chỉ để hiển thị, không còn chức năng kéo */}
+				<div className="absolute top-2 right-2 bg-gray-800/90 text-white rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+					<MdDragIndicator className="w-4 h-4" />
+				</div>
+			</div>
+
+			{/* Main Badge */}
+			{index === 0 && (
+				<div className="absolute -top-2 -left-2 bg-gradient-to-r from-emerald-500 to-teal-500 text-white text-xs px-2.5 py-1 rounded-full font-bold shadow-md z-10 flex items-center gap-1 pointer-events-none">
+					<FiImage className="w-3 h-3" />
+					Ảnh chính
+				</div>
+			)}
+
+			{/* Remove Button */}
+			<button
+				type="button"
+				onClick={(e) => {
+					e.stopPropagation();
+					onRemove(index);
+				}}
+				onPointerDown={(e) => {
+					e.stopPropagation();
+				}}
+				className="absolute -top-2 -right-2 cursor-pointer bg-red-500 hover:bg-red-600 text-white rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-all duration-200 shadow-md hover:shadow-lg hover:scale-110 z-10"
+			>
+				<FiX className="w-4 h-4" />
+			</button>
+		</div>
+	);
+};
+
 const ImageUpload: React.FC<ImageUploadProps> = ({
 	images,
 	previews,
@@ -35,7 +138,18 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 	label = 'Hình ảnh sản phẩm',
 	showLabel = true,
 }) => {
-	const [draggedIndex, setDraggedIndex] = React.useState<number | null>(null);
+	const [activeId, setActiveId] = React.useState<string | null>(null);
+
+	const sensors = useSensors(
+		useSensor(PointerSensor, {
+			activationConstraint: {
+				distance: 8,
+			},
+		}),
+		useSensor(KeyboardSensor, {
+			coordinateGetter: sortableKeyboardCoordinates,
+		})
+	);
 
 	const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
 		const files = Array.from(e.target.files || []);
@@ -86,7 +200,6 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 	};
 
 	const handleRemove = (index: number) => {
-		// Revoke URL trước khi xóa
 		const previewToRemove = previews[index];
 		if (previewToRemove?.url) {
 			URL.revokeObjectURL(previewToRemove.url);
@@ -99,42 +212,35 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 		onChange(newFiles);
 	};
 
-	const handleDragStart = (e: React.DragEvent, index: number) => {
-		setDraggedIndex(index);
-		e.dataTransfer.effectAllowed = 'move';
+	const handleDragStart = (event: DragStartEvent) => {
+		setActiveId(event.active.id as string);
 	};
 
-	const handleDragOver = (e: React.DragEvent, index: number) => {
-		e.preventDefault();
-		e.dataTransfer.dropEffect = 'move';
+	const handleDragEnd = (event: DragEndEvent) => {
+		const { active, over } = event;
 
-		if (draggedIndex === null || draggedIndex === index) return;
+		if (over && active.id !== over.id) {
+			const oldIndex = previews.findIndex(
+				(item) => item.id === active.id
+			);
+			const newIndex = previews.findIndex((item) => item.id === over.id);
 
-		// Chỉ reorder, KHÔNG tạo mới objects
-		const newPreviews = [...previews];
-		const [draggedItem] = newPreviews.splice(draggedIndex, 1);
-		newPreviews.splice(index, 0, draggedItem);
+			const newPreviews = arrayMove(previews, oldIndex, newIndex);
+			const newFiles = newPreviews.map((p) => p.file);
 
-		// Giữ nguyên files theo thứ tự mới
-		const newFiles = newPreviews.map((p) => p.file);
+			onPreviewsChange(newPreviews);
+			onChange(newFiles);
+		}
 
-		onPreviewsChange(newPreviews);
-		onChange(newFiles);
-
-		setDraggedIndex(index);
-	};
-
-	const handleDrop = (e: React.DragEvent) => {
-		e.preventDefault();
-		setDraggedIndex(null);
-	};
-
-	const handleDragEnd = () => {
-		setDraggedIndex(null);
+		setActiveId(null);
 	};
 
 	const isMaxReached = images.length >= maxImages;
 	const acceptString = acceptedFormats.map((fmt) => `image/${fmt}`).join(',');
+
+	const activeItem = activeId
+		? previews.find((item) => item.id === activeId)
+		: null;
 
 	return (
 		<div>
@@ -222,67 +328,42 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 						)}
 					</div>
 
-					{/* Grid */}
-					<div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
-						{previews.map((item, index) => (
-							<div
-								key={item.id}
-								draggable
-								onDragStart={(e) => handleDragStart(e, index)}
-								onDragOver={(e) => handleDragOver(e, index)}
-								onDrop={handleDrop}
-								onDragEnd={handleDragEnd}
-								className={`relative group cursor-move transition-all duration-200 aspect-square ${
-									draggedIndex === index
-										? 'opacity-50 scale-95'
-										: 'opacity-100'
-								}`}
-							>
-								{/* Image Container */}
-								<div className="relative w-full h-full overflow-hidden rounded-2xl border-2 bg-white border-gray-200 group-hover:border-emerald-400 shadow-md group-hover:shadow-lg transition-all duration-200">
-									<img
-										src={item.url}
-										alt={`Preview ${index + 1}`}
-										className="w-full h-full object-cover pointer-events-none select-none"
-										draggable={false}
+					{/* Grid with DnD */}
+					<DndContext
+						sensors={sensors}
+						collisionDetection={closestCenter}
+						onDragStart={handleDragStart}
+						onDragEnd={handleDragEnd}
+					>
+						<SortableContext
+							items={previews.map((p) => p.id)}
+							strategy={rectSortingStrategy}
+						>
+							<div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+								{previews.map((item, index) => (
+									<SortableImage
+										key={item.id}
+										item={item}
+										index={index}
+										onRemove={handleRemove}
 									/>
-
-									{/* Overlay */}
-									<div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
-
-									{/* Image number */}
-									<div className="absolute bottom-2 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded-md font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-										#{index + 1}
-									</div>
-
-									{/* Drag Handle */}
-									<div className="absolute top-2 right-2 bg-gray-800/90 text-white rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-grab active:cursor-grabbing">
-										<MdDragIndicator className="w-4 h-4" />
-									</div>
-								</div>
-
-								{/* Main Badge */}
-								{index === 0 && (
-									<div className="absolute -top-2 -left-2 bg-gradient-to-r from-emerald-500 to-teal-500 text-white text-xs px-2.5 py-1 rounded-full font-bold shadow-md z-10 flex items-center gap-1">
-										<FiImage className="w-3 h-3" />
-										Ảnh chính
-									</div>
-								)}
-
-								{/* Remove Button */}
-								<button
-									type="button"
-									onClick={(e) => {
-										e.stopPropagation();
-										handleRemove(index);
-									}}
-									className="absolute -top-2 -right-2 cursor-pointer bg-red-500 hover:bg-red-600 text-white rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-all duration-200 shadow-md hover:shadow-lg hover:scale-110 z-10"
-								>
-									<FiX className="w-4 h-4" />
-								</button>
+								))}
 							</div>
-						))}
-					</div>
+						</SortableContext>
+
+						{/* Drag Overlay */}
+						<DragOverlay>
+							{activeItem ? (
+								<div className="aspect-square rounded-2xl overflow-hidden border-2 border-emerald-400 shadow-2xl opacity-90">
+									<img
+										src={activeItem.url}
+										alt="Dragging"
+										className="w-full h-full object-cover"
+									/>
+								</div>
+							) : null}
+						</DragOverlay>
+					</DndContext>
 
 					{/* Tip */}
 					{previews.length > 1 && (

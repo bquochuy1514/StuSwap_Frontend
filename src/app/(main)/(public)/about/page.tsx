@@ -48,7 +48,7 @@ export default function AboutPage() {
 
 	const techStack = [
 		{ name: 'Next.js', category: 'Frontend' },
-		{ name: 'Nest.js', category: 'Backend' },
+		{ name: 'NestJS', category: 'Backend' },
 		{ name: 'MySQL', category: 'Database' },
 		{ name: 'TypeScript', category: 'Language' },
 		{ name: 'TailwindCSS', category: 'Styling' },

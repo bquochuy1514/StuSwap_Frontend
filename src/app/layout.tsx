@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import '@/styles/globals.css';
 import { AuthProvider } from '@/contexts/AuthContext';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer } from '@/components/ui/Toast';
 import { DropdownProvider } from '@/contexts/DropdownContext';
 
 const geistSans = Geist({
@@ -37,14 +37,7 @@ export default function RootLayout({
 				<AuthProvider>
 					<DropdownProvider>{children}</DropdownProvider>
 				</AuthProvider>
-
-				<ToastContainer
-					position="top-right"
-					autoClose={4000}
-					newestOnTop={true}
-					closeOnClick={true}
-					theme="light"
-				/>
+				<ToastContainer />
 			</body>
 		</html>
 	);

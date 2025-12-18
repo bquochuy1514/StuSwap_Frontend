@@ -3,7 +3,7 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiCamera, FiX, FiUpload, FiEye, FiZoomIn } from 'react-icons/fi';
-import { toast } from 'react-toastify';
+import { toast } from '@/components/ui/Toast';
 import Image from 'next/image';
 import { uploadAvatar } from '@/lib/api/userApi';
 import { useAuth } from '@/contexts/AuthContext';

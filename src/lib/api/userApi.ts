@@ -61,3 +61,15 @@ export const changeUserPassword = async (
 		throw error;
 	}
 };
+
+export const getMembershipInfo = async () => {
+	try {
+		const response = await api.get('/api/users/me/membership-info');
+		return response.data;
+	} catch (error) {
+		if (error instanceof AxiosError && error.response?.data) {
+			throw error.response?.data || error;
+		}
+		throw error;
+	}
+};

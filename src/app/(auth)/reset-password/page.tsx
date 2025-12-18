@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
+import { toast } from '@/components/ui/Toast';
 import AuthHeader from '@/components/auth/AuthHeader';
 import { useSearchParams } from 'next/navigation';
 import { resetPassword } from '@/lib/api/authApi';

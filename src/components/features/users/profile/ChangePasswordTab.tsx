@@ -4,7 +4,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FiLock, FiShield } from 'react-icons/fi';
-import { toast } from 'react-toastify';
+import { toast } from '@/components/ui/Toast';
 import { changeUserPassword } from '@/lib/api/userApi';
 import { ChangeUserPasswordPayload } from '@/types/user';
 import Input from '@/components/ui/Input';

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // components/ui/SearchBar.tsx
 'use client';
 
@@ -49,15 +50,16 @@ export default function SearchBar({ className }: { className?: string }) {
 		const fetchLocations = async () => {
 			try {
 				const response = await fetch(
-					'https://provinces.open-api.vn/api/p/'
+					'https://api.vnappmob.com/api/v2/province/'
 				);
 				const data = await response.json();
 
-				const transformed: DropdownItem[] = data.map(
-					(prov: Province) => ({
-						id: prov.code,
-						label: prov.name,
-						value: prov.code.toString(),
+				// API mới có wrapper "results"
+				const transformed: DropdownItem[] = data.results.map(
+					(prov: any) => ({
+						id: prov.province_id, // Đổi từ code → province_id
+						label: prov.province_name, // Đổi từ name → province_name
+						value: prov.province_id, // Dùng province_id (đã là string rồi)
 					})
 				);
 
@@ -101,17 +103,16 @@ export default function SearchBar({ className }: { className?: string }) {
 		>
 			{/* Desktop Layout - Single Row */}
 			<div className="hidden lg:flex items-stretch">
-				{/* Location Dropdown */}
+				{/* Category Dropdown */}
 				<Dropdown
-					items={locationItems}
-					value={selectedLocation}
-					onChange={(value) => setSelectedLocation(String(value))}
-					placeholder="Vị trí"
-					icon={<IoLocationOutline className="w-4 h-4" />}
+					items={categoryItems}
+					value={selectedCategory}
+					onChange={(value) => setSelectedCategory(String(value))}
+					placeholder="Danh mục"
+					icon={<HiOutlineViewGrid className="w-4 h-4" />}
 					variant="default"
 					size="md"
-					defaultItem={{ id: 'all', label: 'Toàn quốc' }}
-					searchable
+					defaultItem={{ id: 'all', label: 'Tất cả' }}
 				/>
 
 				{/* Search Input */}
@@ -124,16 +125,17 @@ export default function SearchBar({ className }: { className?: string }) {
 					size="md"
 				/>
 
-				{/* Category Dropdown */}
+				{/* Location Dropdown */}
 				<Dropdown
-					items={categoryItems}
-					value={selectedCategory}
-					onChange={(value) => setSelectedCategory(String(value))}
-					placeholder="Danh mục"
-					icon={<HiOutlineViewGrid className="w-4 h-4" />}
+					items={locationItems}
+					value={selectedLocation}
+					onChange={(value) => setSelectedLocation(String(value))}
+					placeholder="Vị trí"
+					icon={<IoLocationOutline className="w-4 h-4" />}
 					variant="default"
 					size="md"
-					defaultItem={{ id: 'all', label: 'Tất cả' }}
+					defaultItem={{ id: 'all', label: 'Toàn quốc' }}
+					searchable
 				/>
 
 				{/* Search Button */}
@@ -156,6 +158,30 @@ export default function SearchBar({ className }: { className?: string }) {
 
 			{/* Mobile/Tablet Layout - Single Row */}
 			<div className="lg:hidden flex items-stretch">
+				{/* Category Dropdown */}
+				<Dropdown
+					items={categoryItems}
+					value={selectedCategory}
+					onChange={(value) => setSelectedCategory(String(value))}
+					placeholder="Danh mục"
+					icon={<HiOutlineViewGrid className="w-4 h-4" />}
+					variant="compact"
+					size="md"
+					hideIconOnMobile
+					defaultItem={{ id: 'all', label: 'Tất cả' }}
+				/>
+
+				{/* Search Input */}
+				<SearchInput
+					value={searchQuery}
+					onChange={setSearchQuery}
+					onSearch={handleSearch}
+					placeholder="Tìm kiếm đồ cũ..."
+					showIcon={false}
+					expandable={true}
+					size="md"
+				/>
+
 				{/* Location Dropdown */}
 				<Dropdown
 					items={locationItems}
@@ -168,17 +194,6 @@ export default function SearchBar({ className }: { className?: string }) {
 					defaultItem={{ id: 'all', label: 'Toàn quốc' }}
 					hideIconOnMobile
 					searchable
-				/>
-
-				{/* Search Input */}
-				<SearchInput
-					value={searchQuery}
-					onChange={setSearchQuery}
-					onSearch={handleSearch}
-					placeholder="Tìm kiếm đồ cũ..."
-					showIcon={false}
-					expandable={true}
-					size="md"
 				/>
 
 				{/* Search Button */}

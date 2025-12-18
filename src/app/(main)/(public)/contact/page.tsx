@@ -150,7 +150,7 @@ export default function ContactPage() {
 							<div className="flex flex-wrap gap-2">
 								{[
 									'Next.js (Frontend)',
-									'Nest.js (Backend)',
+									'NestJS (Backend)',
 									'MySQL (Database)',
 									'TypeScript (Language)',
 									'TailwindCSS (Styling)',

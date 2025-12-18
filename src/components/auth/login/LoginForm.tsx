@@ -2,9 +2,7 @@
 
 import { useState } from 'react';
 import { FiMail, FiLock } from 'react-icons/fi';
-import { toast } from 'react-toastify';
-// import VerifyModal from '../VerifyModal';
-// import LoadingIcon from '../../shared/LoadingIcon';
+import { toast } from '@/components/ui/Toast';
 import { useAuth } from '@/contexts/AuthContext';
 import Link from 'next/link';
 import { LoginError } from '@/types/auth';

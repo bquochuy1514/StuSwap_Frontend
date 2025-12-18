@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { toast } from 'react-toastify';
+import { toast } from '@/components/ui/Toast';
 import { verifyAccount, resendCode } from '@/lib/api/authApi';
 import { ApiError } from '@/types/auth';
 import GradientButton from '@/components/ui/GradientButton';
@@ -23,7 +23,7 @@ export default function VerifyModal({
 		e.preventDefault();
 		setLoading(true);
 		if (!code) {
-			toast.warn('Vui lòng nhập mã kích hoạt');
+			toast.warning('Vui lòng nhập mã kích hoạt');
 			setLoading(false);
 			return;
 		}

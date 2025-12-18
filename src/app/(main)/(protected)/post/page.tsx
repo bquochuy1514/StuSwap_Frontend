@@ -10,7 +10,7 @@ import {
 	FiCheck,
 	FiFileText,
 } from 'react-icons/fi';
-import { toast } from 'react-toastify';
+import { toast } from '@/components/ui/Toast';
 import Input from '@/components/ui/Input';
 import LocationSelector from '@/components/ui/LocationSelector';
 import Dropdown, { DropdownItem } from '@/components/ui/DropDown';
@@ -24,6 +24,7 @@ import GradientButton from '@/components/ui/GradientButton';
 import LoadingOverlay from '@/components/ui/LoadingOverlay';
 import ImageUpload from '@/components/features/products/post/ImageUpload';
 import ProductPreviewDemo from '@/components/features/products/post/ProductPreviewDemo';
+import { useRouter } from 'next/navigation';
 
 const CONDITION_OPTIONS = [
 	{ value: ProductCondition.NEW, label: 'Mới 100%', icon: '✨' },
@@ -61,6 +62,7 @@ export interface ImagePreview {
 }
 
 export default function PostProductPage() {
+	const router = useRouter();
 	const [formData, setFormData] = useState<ProductFormData>({
 		title: '',
 		description: '',
@@ -206,34 +208,11 @@ export default function PostProductPage() {
 				console.log(key, value);
 			}
 
-			await createProduct(formDataToSend);
+			const response = await createProduct(formDataToSend);
 
-			toast.success('Đăng sản phẩm thành công!');
-			console.log('Form data:', formData);
+			console.log(response);
 
-			// Reset form data về trạng thái ban đầu
-			setFormData({
-				title: '',
-				description: '',
-				price: '',
-				condition: ProductCondition.GOOD,
-				category_id: '',
-				address: {
-					specificAddress: '',
-					ward: '',
-					district: '',
-					province: '',
-				},
-				images: [],
-			});
-
-			// Cleanup image previews cũ và reset
-			imagePreviews.forEach((preview) => {
-				URL.revokeObjectURL(preview.url);
-			});
-			setImagePreviews([]);
-			// Force re-mount LocationSelector bằng cách thay đổi key
-			setLocationKey((prev) => prev + 1);
+			router.push(`/post/success?product_id=${response.product.id}`);
 		} catch (error) {
 			const fieldErrors = handleApiError(error);
 			if (fieldErrors) {

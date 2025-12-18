@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { FiShield } from 'react-icons/fi';
-import { toast } from 'react-toastify';
+import { toast } from '@/components/ui/Toast';
 import { useSearchParams } from 'next/navigation';
 
 import { useRedirect } from '@/hooks/useRedirect';
@@ -130,6 +130,7 @@ export default function VerifyOTP() {
 								loadingText="Đang xác minh..."
 								size="md"
 								variant="primary"
+								className="mt-4"
 							>
 								Xác minh OTP
 							</GradientButton>

@@ -8,7 +8,7 @@ import AuthRedirect from '../AuthRedirect';
 import LoginForm from './LoginForm';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useRef } from 'react';
-import { toast } from 'react-toastify';
+import { toast } from '@/components/ui/Toast';
 import { FiTag, FiShield, FiStar } from 'react-icons/fi';
 
 export default function LoginPage() {

@@ -93,7 +93,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
 	}, [created_at]);
 
 	const formatPrice = (value: string | number) => {
-		if (!value || value === '0' || value === 0) return 'Liên hệ';
+		if (!value || value === '0' || value === 0) return 'Chưa có giá';
 		const numValue = typeof value === 'string' ? parseFloat(value) : value;
 		return `${numValue.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, '.')} ₫`;
 	};

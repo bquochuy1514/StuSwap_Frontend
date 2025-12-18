@@ -65,7 +65,7 @@ export default function BottomNavigation() {
 		<>
 			{/* Banner đăng nhập - đè lên bottom navigation */}
 			{!accessToken && showLoginBanner && (
-				<div className="fixed bottom-0 left-0 right-0 bg-linear-to-br from-gray-50 via-emerald-50/30 to-teal-50/40 border-t border-gray-200 shadow-lg lg:hidden z-999">
+				<div className="fixed bottom-0 left-0 right-0 bg-emerald-50 border-t border-emerald-200 shadow-lg lg:hidden z-[999]">
 					<div className="px-4 py-3 relative">
 						{/* Close button */}
 						<button

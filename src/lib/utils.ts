@@ -1,7 +1,7 @@
 import { clsx, ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import { toast } from 'react-toastify'; // hoặc thư viện toast bạn đang dùng
 import { ApiError, FieldError } from '@/types/auth';
+import { toast } from '@/components/ui/Toast';
 
 /**
  * Gộp classnames Tailwind một cách an toàn.

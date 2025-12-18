@@ -4,13 +4,12 @@ import React, { useState } from 'react';
 import { FiAlertCircle } from 'react-icons/fi';
 import ShowPasswordButton from '../shared/ShowPassButton';
 
-interface InputProps {
+type InputChangeEvent = React.ChangeEvent<HTMLInputElement>;
+type TextareaChangeEvent = React.ChangeEvent<HTMLTextAreaElement>;
+
+interface BaseInputProps {
 	label: string;
 	name: string;
-	value: string;
-	onChange: (
-		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-	) => void;
 	placeholder?: string;
 	type?: string;
 	icon?: React.ReactElement;
@@ -21,9 +20,23 @@ interface InputProps {
 	showPassword?: boolean;
 	onTogglePassword?: () => void;
 	size?: 'sm' | 'md' | 'lg';
-	as?: 'input' | 'textarea';
+}
+
+interface InputAsInputProps extends BaseInputProps {
+	as?: 'input';
+	value: string;
+	onChange: (e: InputChangeEvent) => void;
+	rows?: never;
+}
+
+interface InputAsTextareaProps extends BaseInputProps {
+	as: 'textarea';
+	value: string;
+	onChange: (e: TextareaChangeEvent) => void;
 	rows?: number;
 }
+
+type InputProps = InputAsInputProps | InputAsTextareaProps;
 
 export default function Input({
 	label,
@@ -187,7 +200,7 @@ export default function Input({
 						type={type}
 						disabled={disabled}
 						value={value}
-						onChange={onChange}
+						onChange={onChange as (e: InputChangeEvent) => void}
 						onFocus={() => setFocused(true)}
 						onBlur={() => setFocused(false)}
 						placeholder={placeholder}
@@ -199,7 +212,7 @@ export default function Input({
 						name={name}
 						disabled={disabled}
 						value={value}
-						onChange={onChange}
+						onChange={onChange as (e: TextareaChangeEvent) => void}
 						onFocus={() => setFocused(true)}
 						onBlur={() => setFocused(false)}
 						placeholder={placeholder}
