@@ -80,6 +80,7 @@ export default function PostSuccessPage() {
 
 				// Call API to get product data
 				const data = await fetchProductById(productId);
+				console.log(data);
 				setProductData(data);
 			} catch (err) {
 				console.error('Error fetching product:', err);

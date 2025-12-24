@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { FiMapPin, FiClock, FiHeart, FiTag } from 'react-icons/fi';
 import { AddressData } from '@/types/auth';

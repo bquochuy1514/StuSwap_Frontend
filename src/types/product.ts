@@ -1,4 +1,4 @@
-import { AddressData } from '@/types/auth';
+import { AddressData, User } from '@/types/auth';
 import { Category } from './category';
 
 export enum ProductCondition {
@@ -39,4 +39,5 @@ export type Product = {
 	deleted_at: string | null;
 	category: Category;
 	address: AddressData;
+	user: User;
 };

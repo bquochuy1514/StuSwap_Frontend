@@ -320,8 +320,8 @@ export default function MyProductCard({
 						<div className="flex items-center gap-2 text-sm text-gray-600">
 							<FiMapPin className="flex-shrink-0 w-4 h-4" />
 							<span className="truncate">
-								{product.address.district},{' '}
-								{product.address.province}
+								{product.address?.district},{' '}
+								{product.address?.province}
 							</span>
 						</div>
 

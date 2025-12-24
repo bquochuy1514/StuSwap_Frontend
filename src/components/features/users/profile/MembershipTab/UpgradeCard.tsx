@@ -4,6 +4,7 @@
 import React from 'react';
 import { FiCheck, FiArrowRight } from 'react-icons/fi';
 import { useRouter } from 'next/navigation';
+import CompactButton from '@/components/ui/CompactButton';
 
 interface UpgradeCardProps {
 	currentType?: 'FREE' | 'MEMBERSHIP';
@@ -20,7 +21,7 @@ export default function UpgradeCard({ currentType }: UpgradeCardProps) {
 	];
 
 	const handleUpgrade = () => {
-		router.push('/packages'); // Chuyển đến trang packages
+		router.push('/services/membership'); // Chuyển đến trang packages
 	};
 
 	return (
@@ -51,13 +52,16 @@ export default function UpgradeCard({ currentType }: UpgradeCardProps) {
 			</ul>
 
 			{/* CTA Button */}
-			<button
+			<CompactButton
 				onClick={handleUpgrade}
-				className="w-full flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-xl font-bold text-sm transition-all duration-200 shadow-lg hover:shadow-xl"
+				variant="secondary"
+				fullWidth
+				size="lg"
+				icon={<FiArrowRight className="w-4 h-4" />}
+				className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-xl outline-none border-none"
 			>
 				Xem các gói thành viên
-				<FiArrowRight className="w-4 h-4" />
-			</button>
+			</CompactButton>
 		</div>
 	);
 }

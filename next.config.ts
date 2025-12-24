@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
 		domains: [
 			'localhost',
 			'lh3.googleusercontent.com',
-			'hero-sticky-charming-coordination.trycloudflare.com',
+			'click-techno-intended-preston.trycloudflare.com',
 		], // Add 'localhost' to the allowed domains
 	},
 };

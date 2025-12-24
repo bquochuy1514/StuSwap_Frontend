@@ -45,6 +45,7 @@ export default function CompactButton({
 		`,
 		secondary: `
 			bg-white
+			border-2 border-emerald-600
 			text-emerald-600
 			shadow-md shadow-emerald-500/10
 			hover:bg-emerald-50
@@ -78,7 +79,6 @@ export default function CompactButton({
 				transition-all duration-300 ease-out
 				hover:scale-[1.02]
 				active:scale-[0.98]
-				focus:outline-none focus:ring-2 focus:ring-offset-2
 				disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:hover:shadow-none`,
 				icon ? 'flex items-center justify-center gap-2' : '',
 				sizeClasses[size],

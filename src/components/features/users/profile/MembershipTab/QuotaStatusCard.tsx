@@ -4,6 +4,7 @@
 import React from 'react';
 import { FiRefreshCw, FiTrendingUp } from 'react-icons/fi';
 import { MembershipInfo } from './index';
+import CompactButton from '@/components/ui/CompactButton';
 
 interface QuotaStatusCardProps {
 	quota?: MembershipInfo['quota'];
@@ -13,12 +14,10 @@ export default function QuotaStatusCard({ quota }: QuotaStatusCardProps) {
 	if (!quota) return null;
 
 	const isFree = quota.type === 'FREE';
-	const isUnlimited = quota.totalQuota === null;
 
 	// Calculate progress percentage
-	const progressPercentage = isUnlimited
-		? 100
-		: (quota.currentUsed / (quota.totalQuota || 1)) * 100;
+	const progressPercentage =
+		(quota.currentUsed / (quota.totalQuota || 1)) * 100;
 
 	// Format date
 	const formatDate = (dateString: string | null) => {
@@ -121,13 +120,7 @@ export default function QuotaStatusCard({ quota }: QuotaStatusCardProps) {
 						Bài đã đăng
 					</span>
 					<span className="text-sm font-bold text-gray-900">
-						{isUnlimited ? (
-							<span className="text-purple-600">
-								{quota.currentUsed} bài (Không giới hạn)
-							</span>
-						) : (
-							`${quota.currentUsed}/${quota.totalQuota}`
-						)}
+						{quota.currentUsed}/{quota.totalQuota}
 					</span>
 				</div>
 
@@ -135,9 +128,7 @@ export default function QuotaStatusCard({ quota }: QuotaStatusCardProps) {
 				<div className="relative h-3 bg-gray-200 rounded-full overflow-hidden">
 					<div
 						className={`absolute top-0 left-0 h-full rounded-full transition-all duration-500 ${
-							isUnlimited
-								? 'bg-gradient-to-r from-purple-500 to-pink-500'
-								: isFree
+							isFree
 								? 'bg-gradient-to-r from-emerald-500 to-teal-500'
 								: 'bg-gradient-to-r from-blue-500 to-cyan-500'
 						}`}
@@ -154,9 +145,7 @@ export default function QuotaStatusCard({ quota }: QuotaStatusCardProps) {
 				<div className="flex items-center justify-between text-sm">
 					<span className="text-gray-600 font-medium">Còn lại:</span>
 					<span className="font-bold text-emerald-600">
-						{isUnlimited
-							? 'Không giới hạn'
-							: `${quota.remaining} bài`}
+						{quota.remaining} bài
 					</span>
 				</div>
 
@@ -169,27 +158,6 @@ export default function QuotaStatusCard({ quota }: QuotaStatusCardProps) {
 						{formatDate(isFree ? quota.resetAt : quota.expiresAt)}
 					</span>
 				</div>
-			</div>
-
-			{/* Action Buttons */}
-			<div className="mt-4 flex gap-2">
-				{isFree ? (
-					<button className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg">
-						<FiTrendingUp className="w-4 h-4" />
-						Nâng cấp ngay
-					</button>
-				) : (
-					<>
-						<button className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg">
-							<FiRefreshCw className="w-4 h-4" />
-							Gia hạn
-						</button>
-						<button className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white rounded-xl font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg">
-							<FiTrendingUp className="w-4 h-4" />
-							Nâng cấp
-						</button>
-					</>
-				)}
 			</div>
 		</div>
 	);

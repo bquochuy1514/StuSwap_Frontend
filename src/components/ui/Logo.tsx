@@ -10,7 +10,7 @@ export default function Logo({
 	return canClick ? (
 		<Link
 			href="/"
-			className="flex-shrink-0 hover:opacity-90 transition-opacity"
+			className="flex-shrink-0 hover:opacity-80 transition-opacity"
 		>
 			<div className="flex items-center justify-center h-full w-full">
 				<Image

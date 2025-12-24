@@ -403,7 +403,7 @@ export default function LocationSelector({
 						onChange={(e) => setSpecificAddress(e.target.value)}
 						placeholder="Ví dụ: Số 123, Đường Lê Lợi"
 						autoComplete="off"
-						className="w-full pl-10 pr-4 py-2.5 text-sm border-2 border-gray-200 bg-white rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all hover:border-emerald-300"
+						className="w-full pl-10 pr-4 py-2.5 text-sm border border-gray-200 bg-white rounded-xl focus:outline-none focus:ring-emerald-500/30 focus:border-emerald-500 transition-all hover:border-emerald-300"
 					/>
 					<FiHome className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-emerald-600 pointer-events-none" />
 				</div>

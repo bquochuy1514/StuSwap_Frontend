@@ -16,10 +16,10 @@ export interface MembershipInfo {
 		type: 'FREE' | 'MEMBERSHIP';
 		membershipType: 'BASIC' | 'PREMIUM' | 'VIP' | null;
 		currentUsed: number;
-		totalQuota: number | null; // null = unlimited
-		remaining: number | null; // null = unlimited
-		resetAt: string | null; // cho FREE
-		expiresAt: string | null; // cho MEMBERSHIP
+		totalQuota: number; // đổi từ number | null
+		remaining: number; // đổi từ number | null
+		resetAt: string | null;
+		expiresAt: string | null;
 	};
 	stats: {
 		totalPosts: number;

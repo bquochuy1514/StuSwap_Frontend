@@ -18,21 +18,21 @@ export default function StatsCard({ stats }: StatsCardProps) {
 			label: 'Tổng bài đã đăng',
 			value: stats.totalPosts,
 			color: 'from-blue-500 to-cyan-500',
-			bgColor: 'from-blue-50 to-cyan-50',
+			bgColor: 'bg-blue-50/50',
 		},
 		{
 			icon: <FiCheckCircle className="w-5 h-5" />,
 			label: 'Bài đang hoạt động',
 			value: stats.activePosts,
 			color: 'from-emerald-500 to-teal-500',
-			bgColor: 'from-emerald-50 to-teal-50',
+			bgColor: 'bg-emerald-50/50',
 		},
 		{
 			icon: <FiClock className="w-5 h-5" />,
 			label: 'Bài hết hạn',
 			value: stats.expiredPosts,
 			color: 'from-gray-500 to-gray-600',
-			bgColor: 'from-gray-50 to-gray-100',
+			bgColor: 'bg-gray-50',
 		},
 	];
 
@@ -46,19 +46,23 @@ export default function StatsCard({ stats }: StatsCardProps) {
 				{statItems.map((item, index) => (
 					<div
 						key={index}
-						className={`bg-gradient-to-br ${item.bgColor} rounded-lg p-4 border border-gray-200/50 hover:shadow-md transition-all duration-200`}
+						className={`${item.bgColor} rounded-lg p-4 border border-gray-200/50 hover:shadow-md transition-all duration-200`}
 					>
-						<div
-							className={`inline-flex p-2 bg-gradient-to-br ${item.color} text-white rounded-lg mb-2`}
-						>
-							{item.icon}
+						<div className="flex items-center gap-3">
+							<div
+								className={`flex-shrink-0 p-2.5 bg-gradient-to-br ${item.color} text-white rounded-lg`}
+							>
+								{item.icon}
+							</div>
+							<div className="flex-1 min-w-0">
+								<p className="text-2xl font-bold text-gray-900 leading-none mb-1">
+									{item.value}
+								</p>
+								<p className="text-xs font-medium text-gray-600 leading-tight">
+									{item.label}
+								</p>
+							</div>
 						</div>
-						<p className="text-2xl font-bold text-gray-900 mb-1">
-							{item.value}
-						</p>
-						<p className="text-xs font-medium text-gray-600">
-							{item.label}
-						</p>
 					</div>
 				))}
 			</div>

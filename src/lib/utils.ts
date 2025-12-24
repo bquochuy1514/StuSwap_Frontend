@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { clsx, ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { ApiError, FieldError } from '@/types/auth';
@@ -20,11 +21,23 @@ export function cn(...inputs: ClassValue[]) {
  */
 export const handleApiError = <T extends Record<string, string[]>>(
 	error: unknown,
-	onSpecialCase?: (message: string) => boolean // return true nếu đã xử lý
+	onSpecialCase?: (message: string) => boolean
 ): T | undefined => {
-	const apiError = error as ApiError;
+	// ✅ Xử lý cả AxiosError và response.data
+	let apiError: ApiError | undefined;
 
-	if (!apiError.message) {
+	// Kiểm tra xem có phải AxiosError không
+	if (error && typeof error === 'object' && 'response' in error) {
+		const axiosError = error as any;
+		apiError = axiosError.response?.data;
+	} else if (error && typeof error === 'object' && 'message' in error) {
+		// Trường hợp đã là ApiError object
+		apiError = error as ApiError;
+	}
+
+	// Nếu không có message, hiển thị lỗi mặc định
+	if (!apiError?.message) {
+		console.error('Unknown error format:', error);
 		toast.error('Đã có lỗi xảy ra');
 		return undefined;
 	}
@@ -36,18 +49,24 @@ export const handleApiError = <T extends Record<string, string[]>>(
 			const field = item.field as keyof T;
 			errorObj[field] = item.messages as T[keyof T];
 		});
-		console.log('Lỗi từ handleApiError: ', errorObj);
+		console.log('Lỗi validation từ API:', errorObj);
 		return errorObj;
 	}
 
 	// Case 2: Lỗi dạng string (general error)
-	// Kiểm tra special case trước
-	if (onSpecialCase && onSpecialCase(apiError.message)) {
-		return undefined; // Special case đã được xử lý
+	const errorMessage = apiError.message as string;
+
+	// Kiểm tra special case
+	if (onSpecialCase && onSpecialCase(errorMessage)) {
+		return undefined;
 	}
 
 	// Hiển thị toast cho general error
-	console.log('Lỗi từ handleApiError: ', apiError);
-	toast.error(apiError.message);
+	console.log('Lỗi từ API:', {
+		message: errorMessage,
+		statusCode: apiError.statusCode,
+		error: apiError.error,
+	});
+	toast.error(errorMessage);
 	return undefined;
 };

@@ -172,33 +172,33 @@ export default function BoostServicePage() {
 	);
 
 	return (
-		<div className="min-h-screen py-4 sm:py-6 px-3 sm:px-4 bg-gradient-to-br from-gray-50 via-white to-blue-50/30">
+		<div className="min-h-screen py-3 sm:py-4 px-3 sm:px-4 bg-gradient-to-br from-gray-50 via-white to-blue-50/30">
 			<div className="max-w-6xl mx-auto">
 				{/* Back Button */}
 				<motion.button
 					onClick={() => router.back()}
-					className="flex items-center gap-2 cursor-pointer text-gray-600 hover:text-gray-900 mb-4 sm:mb-6 group"
+					className="flex items-center gap-1.5 cursor-pointer text-gray-600 hover:text-gray-900 mb-3 sm:mb-4 group"
 					whileHover={{ x: -4 }}
 					whileTap={{ scale: 0.95 }}
 				>
-					<FiArrowLeft className="w-5 h-5" />
-					<span className="font-medium">Quay lại</span>
+					<FiArrowLeft className="w-4 h-4" />
+					<span className="text-sm font-medium">Quay lại</span>
 				</motion.button>
 
 				{/* Page Header */}
-				<div className="text-center mb-6 sm:mb-8">
+				<div className="text-center mb-4 sm:mb-5">
 					<motion.div
 						initial={{ opacity: 0, y: 20 }}
 						animate={{ opacity: 1, y: 0 }}
-						className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-orange-500 to-pink-500 rounded-2xl mb-4 shadow-lg"
+						className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-orange-500 to-pink-500 rounded-xl mb-2.5 shadow-lg"
 					>
-						<FiTrendingUp className="w-8 h-8 text-white" />
+						<FiTrendingUp className="w-6 h-6 text-white" />
 					</motion.div>
 					<motion.h1
 						initial={{ opacity: 0, y: 20 }}
 						animate={{ opacity: 1, y: 0 }}
 						transition={{ delay: 0.1 }}
-						className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2"
+						className="text-xl sm:text-2xl font-bold text-gray-900 mb-1.5"
 					>
 						Dịch Vụ Đẩy Tin
 					</motion.h1>
@@ -206,7 +206,7 @@ export default function BoostServicePage() {
 						initial={{ opacity: 0, y: 20 }}
 						animate={{ opacity: 1, y: 0 }}
 						transition={{ delay: 0.2 }}
-						className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto"
+						className="text-xs sm:text-sm text-gray-600 max-w-2xl mx-auto"
 					>
 						Tăng tốc độ bán hàng với dịch vụ đẩy tin chuyên nghiệp.
 						Tin đăng của bạn sẽ được ưu tiên hiển thị ở vị trí nổi
@@ -219,18 +219,18 @@ export default function BoostServicePage() {
 					initial={{ opacity: 0, y: 20 }}
 					animate={{ opacity: 1, y: 0 }}
 					transition={{ delay: 0.3 }}
-					className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 mb-6 sm:mb-8"
+					className="bg-white rounded-lg shadow-sm border border-gray-200 p-3.5 sm:p-4 mb-4 sm:mb-5"
 				>
-					<div className="flex items-start gap-2 mb-3">
-						<FiShoppingBag className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" />
-						<h2 className="text-lg font-bold text-gray-900">
+					<div className="flex items-start gap-1.5 mb-2.5">
+						<FiShoppingBag className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+						<h2 className="text-base font-bold text-gray-900">
 							Sản phẩm cần đẩy tin
 						</h2>
 					</div>
 
-					<div className="flex flex-col sm:flex-row gap-4">
+					<div className="flex flex-col sm:flex-row gap-3">
 						{/* Product Image */}
-						<div className="w-full sm:w-32 h-40 sm:h-32 flex-shrink-0 bg-gray-100 rounded-lg overflow-hidden">
+						<div className="w-full sm:w-24 h-32 sm:h-24 flex-shrink-0 bg-gray-100 rounded-lg overflow-hidden">
 							{images.length > 0 ? (
 								<img
 									src={images[0]}
@@ -239,43 +239,43 @@ export default function BoostServicePage() {
 								/>
 							) : (
 								<div className="w-full h-full flex items-center justify-center">
-									<FiImage className="w-12 h-12 text-gray-300" />
+									<FiImage className="w-10 h-10 text-gray-300" />
 								</div>
 							)}
 						</div>
 
 						{/* Product Details */}
 						<div className="flex-1 min-w-0">
-							<h3 className="text-base sm:text-lg font-bold text-gray-900 mb-2 line-clamp-2">
+							<h3 className="text-sm sm:text-base font-bold text-gray-900 mb-1.5 line-clamp-2">
 								{product.title}
 							</h3>
-							<div className="text-xl sm:text-2xl font-bold text-emerald-600 mb-3">
+							<div className="text-lg sm:text-xl font-bold text-emerald-600 mb-2">
 								{formatPrice(parseFloat(product.price))}
 							</div>
 
-							<div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-600">
-								<div className="flex items-center gap-2">
-									<FiMapPin className="w-4 h-4 text-gray-400 flex-shrink-0" />
+							<div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-xs text-gray-600">
+								<div className="flex items-center gap-1.5">
+									<FiMapPin className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" />
 									<span className="truncate">
 										{product.address.ward},{' '}
 										{product.address.district},{' '}
 										{product.address.province}
 									</span>
 								</div>
-								<div className="flex items-center gap-2">
-									<FiTag className="w-4 h-4 text-gray-400 flex-shrink-0" />
+								<div className="flex items-center gap-1.5">
+									<FiTag className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" />
 									<span className="truncate">
 										{product.category.name}
 									</span>
 								</div>
-								<div className="flex items-center gap-2">
-									<FiCalendar className="w-4 h-4 text-gray-400 flex-shrink-0" />
+								<div className="flex items-center gap-1.5">
+									<FiCalendar className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" />
 									<span className="truncate">
 										Đăng: {formatDate(product.created_at)}
 									</span>
 								</div>
-								<div className="flex items-center gap-2">
-									<FiClock className="w-4 h-4 text-gray-400 flex-shrink-0" />
+								<div className="flex items-center gap-1.5">
+									<FiClock className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" />
 									<span className="truncate">
 										Hết hạn: {formatDate(product.expire_at)}
 									</span>
@@ -290,17 +290,17 @@ export default function BoostServicePage() {
 					initial={{ opacity: 0, y: 20 }}
 					animate={{ opacity: 1, y: 0 }}
 					transition={{ delay: 0.4 }}
-					className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-6 mb-6 sm:mb-8 border border-blue-100"
+					className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-4 mb-4 sm:mb-5 border border-blue-100"
 				>
-					<div className="flex items-start gap-3 mb-4">
-						<div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg flex items-center justify-center flex-shrink-0">
-							<FiZap className="w-5 h-5 text-white" />
+					<div className="flex items-start gap-2.5 mb-3">
+						<div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg flex items-center justify-center flex-shrink-0">
+							<FiZap className="w-4 h-4 text-white" />
 						</div>
 						<div>
-							<h3 className="text-lg font-bold text-gray-900 mb-1">
+							<h3 className="text-base font-bold text-gray-900 mb-0.5">
 								Tại sao nên đẩy tin?
 							</h3>
-							<p className="text-sm text-gray-600 leading-relaxed">
+							<p className="text-xs text-gray-600 leading-relaxed">
 								Trong thời đại số, vị trí hiển thị chính là yếu
 								tố quyết định thành công. Hàng nghìn tin đăng
 								mới mỗi ngày - tin của bạn có thể bị chìm nghìm
@@ -309,17 +309,17 @@ export default function BoostServicePage() {
 						</div>
 					</div>
 
-					<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-						<div className="bg-white/80 backdrop-blur-sm rounded-lg p-4">
-							<div className="flex items-center gap-2 mb-2">
-								<div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-									<span className="text-lg">🚀</span>
+					<div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+						<div className="bg-white/80 backdrop-blur-sm rounded-lg p-3">
+							<div className="flex items-center gap-1.5 mb-1.5">
+								<div className="w-7 h-7 bg-blue-100 rounded-lg flex items-center justify-center">
+									<span className="text-base">🚀</span>
 								</div>
-								<h4 className="font-bold text-gray-900">
+								<h4 className="text-sm font-bold text-gray-900">
 									Tin Đẩy Thường
 								</h4>
 							</div>
-							<p className="text-sm text-gray-600 leading-relaxed">
+							<p className="text-xs text-gray-600 leading-relaxed">
 								Giải pháp hiệu quả cho người bán thông thường.
 								Tin của bạn sẽ{' '}
 								<span className="font-semibold text-blue-600">
@@ -330,13 +330,13 @@ export default function BoostServicePage() {
 							</p>
 						</div>
 
-						<div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 border-2 border-purple-200">
-							<div className="flex items-center gap-2 mb-2">
-								<div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
-									<span className="text-lg">👑</span>
+						<div className="bg-white/80 backdrop-blur-sm rounded-lg p-3 border-2 border-purple-200">
+							<div className="flex items-center gap-1.5 mb-1.5">
+								<div className="w-7 h-7 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
+									<span className="text-base">👑</span>
 								</div>
-								<div className="flex items-center gap-2">
-									<h4 className="font-bold text-gray-900">
+								<div className="flex items-center gap-1.5">
+									<h4 className="text-sm font-bold text-gray-900">
 										Tin Ưu Tiên
 									</h4>
 									<span className="px-2 py-0.5 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-[10px] font-bold rounded-full">
@@ -344,7 +344,7 @@ export default function BoostServicePage() {
 									</span>
 								</div>
 							</div>
-							<p className="text-sm text-gray-600 leading-relaxed">
+							<p className="text-xs text-gray-600 leading-relaxed">
 								Giải pháp cao cấp dành cho người bán chuyên
 								nghiệp. Tin của bạn không chỉ lên đầu - mà còn
 								được{' '}
@@ -363,15 +363,15 @@ export default function BoostServicePage() {
 				</motion.div>
 
 				{/* Packages Grid */}
-				<div className="space-y-6 mb-6">
-					{/* PRIORITY Packages */}
+				<div className="space-y-4 mb-4">
+					{/* BOOST Packages */}
 					{boostPackages.length > 0 && (
 						<div>
-							<h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-								<span className="text-2xl">🚀</span>
+							<h2 className="text-base font-bold text-gray-900 mb-3 flex items-center gap-1.5">
+								<span className="text-xl">🚀</span>
 								Tin Đẩy Thường
 							</h2>
-							<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+							<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
 								{boostPackages.map((pkg, index) => {
 									const style = getPackageStyle(
 										pkg.promotion_type
@@ -387,11 +387,11 @@ export default function BoostServicePage() {
 											className="relative"
 										>
 											<div
-												className={`bg-white rounded-xl border-2 ${
+												className={`bg-white rounded-lg border-2 ${
 													style.borderColor
 												} ${
 													style.shadowColor
-												} shadow-lg p-5 hover:scale-[1.02] transition-all duration-300 cursor-pointer ${
+												} shadow-lg p-3.5 hover:scale-[1.02] transition-all duration-300 cursor-pointer ${
 													selectedPackage === pkg.id
 														? 'ring-4 ring-offset-2 ring-opacity-50'
 														: ''
@@ -401,20 +401,20 @@ export default function BoostServicePage() {
 												}
 											>
 												{/* Package Header */}
-												<div className="flex items-start justify-between mb-4">
-													<div className="flex items-center gap-3">
+												<div className="flex items-start justify-between mb-3">
+													<div className="flex items-center gap-2.5">
 														<div
-															className={`w-12 h-12 bg-gradient-to-br ${style.gradient} rounded-xl flex items-center justify-center text-2xl shadow-md`}
+															className={`w-10 h-10 bg-gradient-to-br ${style.gradient} rounded-lg flex items-center justify-center text-xl shadow-md`}
 														>
 															{style.icon}
 														</div>
 														<div>
-															<h3 className="text-base font-bold text-gray-900">
+															<h3 className="text-sm font-bold text-gray-900">
 																{
 																	pkg.display_name
 																}
 															</h3>
-															<p className="text-xs text-gray-600 flex items-center gap-1">
+															<p className="text-[10px] text-gray-600 flex items-center gap-1">
 																<FiClock className="w-3 h-3" />
 																{formatDuration(
 																	pkg.duration_hours
@@ -425,10 +425,10 @@ export default function BoostServicePage() {
 												</div>
 
 												{/* Price */}
-												<div className="pb-4 border-b border-gray-100">
-													<div className="flex items-end gap-2">
+												<div className="pb-3 border-b border-gray-100">
+													<div className="flex items-end gap-1.5">
 														<span
-															className={`text-2xl font-bold bg-gradient-to-r ${style.gradient} text-transparent bg-clip-text`}
+															className={`text-xl font-bold bg-gradient-to-r ${style.gradient} text-transparent bg-clip-text`}
 														>
 															{formatPrice(
 																parseFloat(
@@ -440,8 +440,8 @@ export default function BoostServicePage() {
 												</div>
 
 												{/* Description */}
-												<div className="mb-4">
-													<p className="text-sm text-gray-700 leading-relaxed">
+												<div className="my-3">
+													<p className="text-xs text-gray-700 leading-relaxed">
 														{pkg.description}
 													</p>
 												</div>
@@ -455,7 +455,7 @@ export default function BoostServicePage() {
 															pkg.id
 														)
 													}
-													className={`w-full py-2.5 rounded-lg cursor-pointer font-semibold text-white transition-all duration-300 shadow-md hover:shadow-lg ${
+													className={`w-full py-2 rounded-lg cursor-pointer text-sm font-semibold text-white transition-all duration-300 shadow-md hover:shadow-lg ${
 														selectedPackage ===
 														pkg.id
 															? `bg-gradient-to-r ${style.gradient}`
@@ -474,14 +474,14 @@ export default function BoostServicePage() {
 						</div>
 					)}
 
-					{/* BOOST Packages */}
+					{/* PRIORITY Packages */}
 					{priorityPackages.length > 0 && (
 						<div>
-							<h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-								<span className="text-2xl">👑</span>
+							<h2 className="text-base font-bold text-gray-900 mb-3 flex items-center gap-1.5">
+								<span className="text-xl">👑</span>
 								Tin Ưu Tiên
 							</h2>
-							<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+							<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
 								{priorityPackages.map((pkg, index) => {
 									const style = getPackageStyle(
 										pkg.promotion_type
@@ -497,11 +497,11 @@ export default function BoostServicePage() {
 											className="relative"
 										>
 											<div
-												className={`bg-white rounded-xl border-2 ${
+												className={`bg-white rounded-lg border-2 ${
 													style.borderColor
 												} ${
 													style.shadowColor
-												} shadow-lg p-5 hover:scale-[1.02] transition-all duration-300 cursor-pointer ${
+												} shadow-lg p-3.5 hover:scale-[1.02] transition-all duration-300 cursor-pointer ${
 													selectedPackage === pkg.id
 														? 'ring-4 ring-offset-2 ring-opacity-50'
 														: ''
@@ -511,20 +511,20 @@ export default function BoostServicePage() {
 												}
 											>
 												{/* Package Header */}
-												<div className="flex items-start justify-between mb-4">
-													<div className="flex items-center gap-3">
+												<div className="flex items-start justify-between mb-3">
+													<div className="flex items-center gap-2.5">
 														<div
-															className={`w-12 h-12 bg-gradient-to-br ${style.gradient} rounded-xl flex items-center justify-center text-2xl shadow-md`}
+															className={`w-10 h-10 bg-gradient-to-br ${style.gradient} rounded-lg flex items-center justify-center text-xl shadow-md`}
 														>
 															{style.icon}
 														</div>
 														<div>
-															<h3 className="text-base font-bold text-gray-900">
+															<h3 className="text-sm font-bold text-gray-900">
 																{
 																	pkg.display_name
 																}
 															</h3>
-															<p className="text-xs text-gray-600 flex items-center gap-1">
+															<p className="text-[10px] text-gray-600 flex items-center gap-1">
 																<FiClock className="w-3 h-3" />
 																{formatDuration(
 																	pkg.duration_hours
@@ -535,10 +535,10 @@ export default function BoostServicePage() {
 												</div>
 
 												{/* Price */}
-												<div className="pb-4 border-b border-gray-100">
-													<div className="flex items-end gap-2">
+												<div className="pb-3 border-b border-gray-100">
+													<div className="flex items-end gap-1.5">
 														<span
-															className={`text-2xl font-bold bg-gradient-to-r ${style.gradient} text-transparent bg-clip-text`}
+															className={`text-xl font-bold bg-gradient-to-r ${style.gradient} text-transparent bg-clip-text`}
 														>
 															{formatPrice(
 																parseFloat(
@@ -550,8 +550,8 @@ export default function BoostServicePage() {
 												</div>
 
 												{/* Description */}
-												<div className="mb-4">
-													<p className="text-sm text-gray-700 leading-relaxed">
+												<div className="my-3">
+													<p className="text-xs text-gray-700 leading-relaxed">
 														{pkg.description}
 													</p>
 												</div>
@@ -565,7 +565,7 @@ export default function BoostServicePage() {
 															pkg.id
 														)
 													}
-													className={`w-full py-2.5 rounded-lg cursor-pointer font-semibold text-white transition-all duration-300 shadow-md hover:shadow-lg ${
+													className={`w-full py-2 rounded-lg cursor-pointer text-sm font-semibold text-white transition-all duration-300 shadow-md hover:shadow-lg ${
 														selectedPackage ===
 														pkg.id
 															? `bg-gradient-to-r ${style.gradient}`
@@ -590,17 +590,17 @@ export default function BoostServicePage() {
 					initial={{ opacity: 0, y: 20 }}
 					animate={{ opacity: 1, y: 0 }}
 					transition={{ delay: 0.7 }}
-					className="bg-white rounded-xl shadow-sm border border-gray-200 p-5 sm:p-6"
+					className="bg-white rounded-lg shadow-sm border border-gray-200 p-4"
 				>
-					<div className="flex items-start gap-3 mb-4">
-						<div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center flex-shrink-0">
-							<FiAlertCircle className="w-5 h-5 text-amber-600" />
+					<div className="flex items-start gap-2.5 mb-3">
+						<div className="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center flex-shrink-0">
+							<FiAlertCircle className="w-4 h-4 text-amber-600" />
 						</div>
 						<div className="flex-1">
-							<h3 className="font-bold text-gray-900 mb-1">
+							<h3 className="text-sm font-bold text-gray-900 mb-1">
 								Lưu ý quan trọng
 							</h3>
-							<ul className="text-sm text-gray-600 space-y-1">
+							<ul className="text-xs text-gray-600 space-y-0.5">
 								<li>
 									• Tin đăng phải được duyệt và đang hoạt động
 								</li>
@@ -616,12 +616,12 @@ export default function BoostServicePage() {
 						</div>
 					</div>
 
-					<div className="flex flex-col sm:flex-row gap-3">
+					<div className="flex flex-col sm:flex-row gap-2.5">
 						<CompactButton
 							onClick={() => router.back()}
 							variant="secondary"
 							fullWidth
-							size="lg"
+							size="md"
 						>
 							Hủy bỏ
 						</CompactButton>
@@ -635,7 +635,7 @@ export default function BoostServicePage() {
 									? 'bg-gradient-to-r from-emerald-500 to-teal-600'
 									: ''
 							}`}
-							size="lg"
+							size="md"
 							fullWidth
 						>
 							{isProcessing

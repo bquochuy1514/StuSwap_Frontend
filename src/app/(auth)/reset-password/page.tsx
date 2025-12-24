@@ -17,6 +17,8 @@ import Logo from '@/components/ui/Logo';
 
 export default function ResetPassword() {
 	const searchParams = useSearchParams();
+	const [showPassword, setShowPassword] = useState(false);
+	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [confirmPassword, setConfirmPassword] = useState('');
@@ -105,7 +107,12 @@ export default function ResetPassword() {
 							<Input
 								label="Mật khẩu mới"
 								name="password"
-								type="password"
+								type={showPassword ? 'text' : 'password'}
+								onTogglePassword={() =>
+									setShowPassword(!showPassword)
+								}
+								showPasswordToggle={true}
+								showPassword={showPassword}
 								value={password}
 								onChange={(e) => {
 									setPassword(e.target.value);
@@ -127,7 +134,12 @@ export default function ResetPassword() {
 							<Input
 								label="Xác nhận mật khẩu mới"
 								name="confirmPassword"
-								type="password"
+								type={showConfirmPassword ? 'text' : 'password'}
+								onTogglePassword={() =>
+									setShowConfirmPassword(!showConfirmPassword)
+								}
+								showPasswordToggle={true}
+								showPassword={showConfirmPassword}
 								value={confirmPassword}
 								onChange={(e) => {
 									setConfirmPassword(e.target.value);

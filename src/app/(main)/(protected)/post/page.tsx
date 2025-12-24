@@ -210,7 +210,7 @@ export default function PostProductPage() {
 
 			const response = await createProduct(formDataToSend);
 
-			console.log(response);
+			toast.success(response.message);
 
 			router.push(`/post/success?product_id=${response.product.id}`);
 		} catch (error) {

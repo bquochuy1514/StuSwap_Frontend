@@ -197,33 +197,33 @@ export default function RenewPaymentPage() {
 	const price = parseFloat(selectedPackage.price);
 
 	return (
-		<div className="min-h-screen py-4 sm:py-6 px-3 sm:px-4 bg-gradient-to-br from-gray-50 via-white to-green-50/30">
-			<div className="max-w-4xl mx-auto">
+		<div className="min-h-screen py-3 sm:py-4 px-3 sm:px-4 bg-gradient-to-br from-gray-50 via-white to-green-50/30">
+			<div className="max-w-6xl mx-auto">
 				{/* Back Button */}
 				<motion.button
 					onClick={() => router.back()}
-					className="flex items-center gap-2 cursor-pointer text-gray-600 hover:text-gray-900 mb-4 sm:mb-6 group"
+					className="flex items-center gap-1.5 cursor-pointer text-gray-600 hover:text-gray-900 mb-3 sm:mb-4 group"
 					whileHover={{ x: -4 }}
 					whileTap={{ scale: 0.95 }}
 				>
-					<FiArrowLeft className="w-5 h-5" />
-					<span className="font-medium">Quay lại</span>
+					<FiArrowLeft className="w-4 h-4" />
+					<span className="text-sm font-medium">Quay lại</span>
 				</motion.button>
 
 				{/* Page Header */}
-				<div className="text-center mb-6 sm:mb-8">
+				<div className="text-center mb-4 sm:mb-5">
 					<motion.div
 						initial={{ opacity: 0, y: 20 }}
 						animate={{ opacity: 1, y: 0 }}
-						className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-500 rounded-2xl mb-4 shadow-lg"
+						className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl mb-2.5 shadow-lg"
 					>
-						<FiCreditCard className="w-8 h-8 text-white" />
+						<FiCreditCard className="w-6 h-6 text-white" />
 					</motion.div>
 					<motion.h1
 						initial={{ opacity: 0, y: 20 }}
 						animate={{ opacity: 1, y: 0 }}
 						transition={{ delay: 0.1 }}
-						className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2"
+						className="text-xl sm:text-2xl font-bold text-gray-900 mb-1.5"
 					>
 						Xác Nhận Thanh Toán
 					</motion.h1>
@@ -231,31 +231,31 @@ export default function RenewPaymentPage() {
 						initial={{ opacity: 0, y: 20 }}
 						animate={{ opacity: 1, y: 0 }}
 						transition={{ delay: 0.2 }}
-						className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto"
+						className="text-xs sm:text-sm text-gray-600 max-w-2xl mx-auto"
 					>
 						Vui lòng kiểm tra kỹ thông tin trước khi thanh toán
 					</motion.p>
 				</div>
 
 				{/* Main Content */}
-				<div className="space-y-4 sm:space-y-6">
+				<div className="space-y-3 sm:space-y-4">
 					{/* Product Info */}
 					<motion.div
 						initial={{ opacity: 0, y: 20 }}
 						animate={{ opacity: 1, y: 0 }}
 						transition={{ delay: 0.3 }}
-						className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6"
+						className="bg-white rounded-lg shadow-sm border border-gray-200 p-3.5 sm:p-4"
 					>
-						<div className="flex items-center gap-2 mb-4">
-							<FiShoppingBag className="w-5 h-5 text-emerald-600" />
-							<h2 className="text-lg font-bold text-gray-900">
+						<div className="flex items-start gap-1.5 mb-2.5">
+							<FiShoppingBag className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+							<h2 className="text-base font-bold text-gray-900">
 								Thông tin sản phẩm
 							</h2>
 						</div>
 
-						<div className="flex flex-col sm:flex-row gap-4">
+						<div className="flex flex-col sm:flex-row gap-3">
 							{/* Product Image */}
-							<div className="w-full sm:w-32 h-40 sm:h-32 flex-shrink-0 bg-gray-100 rounded-lg overflow-hidden">
+							<div className="w-full sm:w-24 h-32 sm:h-24 flex-shrink-0 bg-gray-100 rounded-lg overflow-hidden">
 								{images.length > 0 ? (
 									<img
 										src={images[0]}
@@ -264,43 +264,43 @@ export default function RenewPaymentPage() {
 									/>
 								) : (
 									<div className="w-full h-full flex items-center justify-center">
-										<FiImage className="w-12 h-12 text-gray-300" />
+										<FiImage className="w-10 h-10 text-gray-300" />
 									</div>
 								)}
 							</div>
 
 							{/* Product Details */}
 							<div className="flex-1 min-w-0">
-								<h3 className="text-base sm:text-lg font-bold text-gray-900 mb-2 line-clamp-2">
+								<h3 className="text-sm sm:text-base font-bold text-gray-900 mb-1.5 line-clamp-2">
 									{product.title}
 								</h3>
-								<div className="text-xl sm:text-2xl font-bold text-emerald-600 mb-3">
+								<div className="text-lg sm:text-xl font-bold text-emerald-600 mb-2">
 									{formatPrice(parseFloat(product.price))}
 								</div>
 
-								<div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-600">
-									<div className="flex items-center gap-2">
-										<FiMapPin className="w-4 h-4 text-gray-400 flex-shrink-0" />
+								<div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-xs text-gray-600">
+									<div className="flex items-center gap-1.5">
+										<FiMapPin className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" />
 										<span className="truncate">
 											{product.address.district},{' '}
 											{product.address.province}
 										</span>
 									</div>
-									<div className="flex items-center gap-2">
-										<FiTag className="w-4 h-4 text-gray-400 flex-shrink-0" />
+									<div className="flex items-center gap-1.5">
+										<FiTag className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" />
 										<span className="truncate">
 											{product.category.name}
 										</span>
 									</div>
-									<div className="flex items-center gap-2">
-										<FiCalendar className="w-4 h-4 text-gray-400 flex-shrink-0" />
+									<div className="flex items-center gap-1.5">
+										<FiCalendar className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" />
 										<span className="truncate">
 											Đăng:{' '}
 											{formatDateTime(product.created_at)}
 										</span>
 									</div>
-									<div className="flex items-center gap-2">
-										<FiClock className="w-4 h-4 text-red-500 flex-shrink-0" />
+									<div className="flex items-center gap-1.5">
+										<FiClock className="w-3.5 h-3.5 text-red-500 flex-shrink-0" />
 										<span className="truncate font-semibold text-red-600">
 											Hết hạn:{' '}
 											{formatDateTime(product.expire_at)}
@@ -316,47 +316,47 @@ export default function RenewPaymentPage() {
 						initial={{ opacity: 0, y: 20 }}
 						animate={{ opacity: 1, y: 0 }}
 						transition={{ delay: 0.4 }}
-						className={`bg-gradient-to-r ${style.bgGradient} rounded-xl border-2 border-opacity-50 p-4 sm:p-6`}
+						className={`bg-gradient-to-r ${style.bgGradient} rounded-lg border-2 border-opacity-50 p-3.5 sm:p-4`}
 					>
-						<div className="flex items-center gap-2 mb-4">
-							<FiPackage className="w-5 h-5 text-gray-900" />
-							<h2 className="text-lg font-bold text-gray-900">
+						<div className="flex items-start gap-1.5 mb-2.5">
+							<FiPackage className="w-4 h-4 text-gray-900 flex-shrink-0 mt-0.5" />
+							<h2 className="text-base font-bold text-gray-900">
 								Gói gia hạn đã chọn
 							</h2>
 						</div>
 
-						<div className="bg-white/80 backdrop-blur-sm rounded-lg p-4">
-							<div className="flex items-start gap-3 mb-3">
+						<div className="bg-white/80 backdrop-blur-sm rounded-lg p-3">
+							<div className="flex items-start gap-2.5 mb-2.5">
 								<div
-									className={`w-12 h-12 bg-gradient-to-br ${style.gradient} rounded-xl flex items-center justify-center text-2xl shadow-md flex-shrink-0`}
+									className={`w-10 h-10 bg-gradient-to-br ${style.gradient} rounded-lg flex items-center justify-center text-xl shadow-md flex-shrink-0`}
 								>
 									{style.icon}
 								</div>
 								<div className="flex-1">
-									<h3 className="font-bold text-gray-900 text-lg mb-1">
+									<h3 className="font-bold text-gray-900 text-sm mb-0.5">
 										{selectedPackage.display_name}
 									</h3>
-									<p className="text-sm text-gray-600">
+									<p className="text-xs text-gray-600">
 										{selectedPackage.description}
 									</p>
 								</div>
 							</div>
 
-							<div className="grid grid-cols-2 gap-3 pt-3 border-t border-gray-200">
+							<div className="grid grid-cols-2 gap-2.5 pt-2.5 border-t border-gray-200">
 								<div>
-									<div className="text-xs text-gray-500 mb-1">
+									<div className="text-[10px] text-gray-500 mb-0.5">
 										Thời gian gia hạn
 									</div>
-									<div className="flex items-center gap-1 text-sm font-semibold text-gray-900">
-										<FiClock className="w-4 h-4" />+
+									<div className="flex items-center gap-1 text-xs font-semibold text-gray-900">
+										<FiClock className="w-3.5 h-3.5" />+
 										{selectedPackage.extend_days} ngày
 									</div>
 								</div>
 								<div>
-									<div className="text-xs text-gray-500 mb-1">
+									<div className="text-[10px] text-gray-500 mb-0.5">
 										Giá mỗi ngày
 									</div>
-									<div className="text-sm font-semibold text-gray-900">
+									<div className="text-xs font-semibold text-gray-900">
 										≈{' '}
 										{formatPrice(
 											price / selectedPackage.extend_days
@@ -372,54 +372,56 @@ export default function RenewPaymentPage() {
 						initial={{ opacity: 0, y: 20 }}
 						animate={{ opacity: 1, y: 0 }}
 						transition={{ delay: 0.5 }}
-						className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6"
+						className="bg-white rounded-lg shadow-sm border border-gray-200 p-3.5 sm:p-4"
 					>
-						<div className="flex items-center gap-2 mb-4">
-							<FiDollarSign className="w-5 h-5 text-emerald-600" />
-							<h2 className="text-lg font-bold text-gray-900">
+						<div className="flex items-start gap-1.5 mb-2.5">
+							<FiDollarSign className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+							<h2 className="text-base font-bold text-gray-900">
 								Chi tiết thanh toán
 							</h2>
 						</div>
 
-						<div className="space-y-3">
-							<div className="flex items-center justify-between py-2">
-								<span className="text-gray-600">Giá gói</span>
-								<span className="font-semibold text-gray-900">
+						<div className="space-y-2">
+							<div className="flex items-center justify-between py-1.5">
+								<span className="text-xs text-gray-600">
+									Giá gói
+								</span>
+								<span className="text-sm font-semibold text-gray-900">
 									{formatPrice(price)}
 								</span>
 							</div>
 
-							<div className="flex items-center justify-between py-2 border-t border-gray-200">
-								<div className="flex items-center gap-2">
-									<FiCalendar className="w-4 h-4 text-gray-500" />
-									<span className="text-gray-600">
+							<div className="flex items-center justify-between py-1.5 border-t border-gray-200">
+								<div className="flex items-center gap-1.5">
+									<FiCalendar className="w-3.5 h-3.5 text-gray-400" />
+									<span className="text-xs text-gray-600">
 										Ngày hết hạn hiện tại
 									</span>
 								</div>
-								<span className="font-medium text-gray-700">
+								<span className="text-xs font-medium text-gray-700">
 									{formatDateTime(product.expire_at)}
 								</span>
 							</div>
 
-							<div className="flex items-center justify-between py-2 bg-green-50 rounded-lg px-3">
-								<div className="flex items-center gap-2">
-									<FiCalendar className="w-4 h-4 text-green-600" />
-									<span className="text-green-700 font-medium">
+							<div className="flex items-center justify-between py-1.5 bg-green-50 rounded-lg px-2.5">
+								<div className="flex items-center gap-1.5">
+									<FiCalendar className="w-3.5 h-3.5 text-green-600" />
+									<span className="text-xs text-green-700 font-medium">
 										Ngày hết hạn mới
 									</span>
 								</div>
-								<span className="font-bold text-green-700">
+								<span className="text-xs font-bold text-green-700">
 									{formatDateTime(
 										newExpireDate.toISOString()
 									)}
 								</span>
 							</div>
 
-							<div className="flex items-center justify-between py-3 border-t-2 border-gray-300 mt-2">
-								<span className="text-lg font-bold text-gray-900">
+							<div className="flex items-center justify-between py-2 border-t-2 border-gray-300 mt-1.5">
+								<span className="text-base font-bold text-gray-900">
 									Tổng thanh toán
 								</span>
-								<span className="text-2xl font-bold text-emerald-600">
+								<span className="text-xl font-bold text-emerald-600">
 									{formatPrice(price)}
 								</span>
 							</div>
@@ -431,37 +433,37 @@ export default function RenewPaymentPage() {
 						initial={{ opacity: 0, y: 20 }}
 						animate={{ opacity: 1, y: 0 }}
 						transition={{ delay: 0.6 }}
-						className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6"
+						className="bg-white rounded-lg shadow-sm border border-gray-200 p-3.5 sm:p-4"
 					>
-						<div className="flex items-center gap-2 mb-4">
-							<FiCreditCard className="w-5 h-5 text-blue-600" />
-							<h2 className="text-lg font-bold text-gray-900">
+						<div className="flex items-start gap-1.5 mb-2.5">
+							<FiCreditCard className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
+							<h2 className="text-base font-bold text-gray-900">
 								Phương thức thanh toán
 							</h2>
 						</div>
 
-						<div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-4 border-2 border-blue-200">
-							<div className="flex items-start gap-3">
-								<div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm">
+						<div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-3 border-2 border-blue-200">
+							<div className="flex items-start gap-2.5">
+								<div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm">
 									<img
 										src="/payos-logo.png"
 										alt="PayOS"
-										className="w-8 h-8 object-contain"
+										className="w-7 h-7 object-contain"
 									/>
 								</div>
 								<div className="flex-1">
-									<h3 className="font-bold text-gray-900 mb-1">
+									<h3 className="text-sm font-bold text-gray-900 mb-0.5">
 										PayOS - Cổng thanh toán
 									</h3>
-									<p className="text-sm text-gray-600 mb-2">
+									<p className="text-xs text-gray-600 mb-1.5">
 										Thanh toán qua QR Code hoặc chuyển khoản
 										ngân hàng
 									</p>
-									<div className="flex flex-wrap gap-2">
-										<span className="px-2 py-1 bg-white rounded text-xs font-medium text-gray-700">
+									<div className="flex flex-wrap gap-1.5">
+										<span className="px-2 py-0.5 bg-white rounded text-[10px] font-medium text-gray-700">
 											QR Code
 										</span>
-										<span className="px-2 py-1 bg-white rounded text-xs font-medium text-gray-700">
+										<span className="px-2 py-0.5 bg-white rounded text-[10px] font-medium text-gray-700">
 											Bank Transfer
 										</span>
 									</div>
@@ -475,15 +477,17 @@ export default function RenewPaymentPage() {
 						initial={{ opacity: 0, y: 20 }}
 						animate={{ opacity: 1, y: 0 }}
 						transition={{ delay: 0.7 }}
-						className="bg-amber-50 rounded-xl border border-amber-200 p-4 sm:p-6"
+						className="bg-amber-50 rounded-lg border border-amber-200 p-3.5 sm:p-4"
 					>
-						<div className="flex items-start gap-3">
-							<FiAlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
-							<div>
-								<h3 className="font-bold text-amber-900 mb-2">
+						<div className="flex items-start gap-2.5">
+							<div className="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center flex-shrink-0">
+								<FiAlertCircle className="w-4 h-4 text-amber-600" />
+							</div>
+							<div className="flex-1">
+								<h3 className="text-sm font-bold text-amber-900 mb-1">
 									Lưu ý quan trọng
 								</h3>
-								<ul className="text-sm text-amber-800 space-y-1">
+								<ul className="text-xs text-amber-800 space-y-0.5">
 									<li>
 										• Tin đăng sẽ được gia hạn ngay sau khi
 										thanh toán thành công
@@ -506,30 +510,32 @@ export default function RenewPaymentPage() {
 						initial={{ opacity: 0, y: 20 }}
 						animate={{ opacity: 1, y: 0 }}
 						transition={{ delay: 0.8 }}
-						className="flex flex-col sm:flex-row gap-3"
+						className="flex flex-col sm:flex-row gap-2.5"
 					>
 						<CompactButton
 							onClick={() => router.back()}
 							variant="secondary"
 							fullWidth
-							size="lg"
-							icon={<FiArrowLeft />}
-							className="flex-1"
+							size="md"
 							disabled={isProcessing}
 						>
-							Quay lại
+							Hủy bỏ
 						</CompactButton>
 
 						<CompactButton
 							onClick={handlePayment}
-							variant="primary"
-							fullWidth
-							size="lg"
-							icon={<FiCheckCircle />}
-							className="flex-1"
 							disabled={isProcessing}
+							className={`${
+								!isProcessing
+									? 'bg-gradient-to-r from-emerald-500 to-teal-600'
+									: ''
+							}`}
+							size="md"
+							fullWidth
 						>
-							Xác nhận thanh toán
+							{isProcessing
+								? 'Đang xử lý...'
+								: 'Xác nhận thanh toán'}
 						</CompactButton>
 					</motion.div>
 				</div>

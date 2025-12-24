@@ -126,6 +126,10 @@ export type User = {
 	bio: string | null;
 	university: string | null;
 	isActive: boolean;
+	membershipType: 'BASIC' | 'PREMIUM' | 'VIP' | null;
+	membershipExpiresAt: string | null;
+	membershipPostQuota: number | null;
+	membershipPostUsed: number | null;
 	createdAt: string;
 	updatedAt: string;
 };
