@@ -218,7 +218,7 @@ export default function MembershipPaymentPage() {
 	const style = getMembershipStyle(selectedPackage.membership_type);
 	const expireDate = calculateExpireDate(
 		selectedPackage.membership_days,
-		userProfile.membership_expire_at
+		userProfile.membershipExpiresAt
 	);
 	const price = parseFloat(selectedPackage.price);
 	const features = getPackageFeatures(selectedPackage);
