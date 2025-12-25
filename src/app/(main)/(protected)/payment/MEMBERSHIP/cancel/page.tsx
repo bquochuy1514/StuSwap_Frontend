@@ -319,13 +319,13 @@ export default function MembershipPaymentCancel() {
 									<p className="truncate">{userData.email}</p>
 									{userData.phone && <p>{userData.phone}</p>}
 								</div>
-								{userData.membership_expire_at && (
+								{userData.membershipExpiresAt && (
 									<div className="mt-2 flex items-center gap-1.5">
 										<Calendar className="w-3.5 h-3.5 text-gray-400" />
 										<span className="text-xs text-gray-600">
 											Membership đến:{' '}
 											{formatDateTime(
-												userData.membership_expire_at
+												userData.membershipExpiresAt
 											)}
 										</span>
 									</div>

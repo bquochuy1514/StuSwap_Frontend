@@ -160,8 +160,8 @@ export default function MembershipPaymentSuccess() {
 
 	// Calculate new expiry date
 	const getNewExpiryDate = () => {
-		if (!userData?.membership_expire_at || !packageData) return null;
-		const currentExpiry = new Date(userData.membership_expire_at);
+		if (!userData?.membershipExpiresAt || !packageData) return null;
+		const currentExpiry = new Date(userData.membershipExpiresAt);
 		const now = new Date();
 
 		// If membership already expired, start from now
