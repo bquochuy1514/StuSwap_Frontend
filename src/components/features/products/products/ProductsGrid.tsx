@@ -17,10 +17,9 @@ interface ProductsGridProps {
 		hasPrevPage: boolean;
 	};
 	sortBy: string;
-	sortItems: DropdownItem[];
+	sortItems: DropdownItem<string>[]; // ✅ Khai báo type rõ ràng
 	likedProducts: string[];
-	page: number;
-	onSortChange: (value: string | number) => void;
+	onSortChange: (value: string) => void;
 	onPageChange: (page: number) => void;
 	onLike: (id: string) => void;
 	onProductClick: (id: string) => void;
@@ -34,7 +33,6 @@ export default function ProductsGrid({
 	sortBy,
 	sortItems,
 	likedProducts,
-	page,
 	onSortChange,
 	onPageChange,
 	onLike,
@@ -63,7 +61,7 @@ export default function ProductsGrid({
 					<span className="text-sm text-gray-600 hidden sm:inline">
 						Sắp xếp:
 					</span>
-					<Dropdown
+					<Dropdown<string>
 						items={sortItems}
 						value={sortBy}
 						onChange={onSortChange}
@@ -118,7 +116,7 @@ export default function ProductsGrid({
 							<div className="flex items-center gap-2">
 								<button
 									disabled={!meta.hasPrevPage}
-									onClick={() => onPageChange(page - 1)}
+									onClick={() => onPageChange(meta.page - 1)}
 									className="px-3 md:px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
 								>
 									Trước
@@ -157,7 +155,7 @@ export default function ProductsGrid({
 
 								<button
 									disabled={!meta.hasNextPage}
-									onClick={() => onPageChange(page + 1)}
+									onClick={() => onPageChange(meta.page + 1)}
 									className="px-3 md:px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
 								>
 									Sau

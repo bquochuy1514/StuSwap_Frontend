@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // src/app/(main)/(public)/products/page.tsx
 'use client';
 import React, { useState, useEffect } from 'react';
@@ -87,7 +88,7 @@ export default function ProductsPage() {
 		{ id: 'FAIR', label: 'Khá', value: 'used_fair' },
 	];
 
-	const sortItems: DropdownItem[] = [
+	const sortItems: DropdownItem<string>[] = [
 		{ id: 'newest', label: 'Mới nhất', value: 'newest' },
 		{ id: 'price_asc', label: 'Giá thấp đến cao', value: 'price_asc' },
 		{ id: 'price_desc', label: 'Giá cao đến thấp', value: 'price_desc' },

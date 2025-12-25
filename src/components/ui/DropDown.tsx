@@ -7,16 +7,18 @@ import { motion, AnimatePresence, Variants } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { useDropdownState } from '@/contexts/DropdownContext';
 
-export interface DropdownItem {
+// Generic interface cho DropdownItem
+export interface DropdownItem<T = string | number> {
 	id: string | number;
 	label: string;
-	value?: string | number;
+	value?: T; // Generic value type
 }
 
-interface DropdownProps {
-	items: DropdownItem[];
-	value: string | number;
-	onChange: (value: string | number) => void;
+// Generic interface cho DropdownProps
+interface DropdownProps<T = string | number> {
+	items: DropdownItem<T>[];
+	value: T;
+	onChange: (value: T) => void;
 	placeholder?: string;
 	label?: string;
 	icon?: ReactNode;
@@ -26,11 +28,12 @@ interface DropdownProps {
 	position?: 'left' | 'right';
 	searchable?: boolean;
 	hideIconOnMobile?: boolean;
-	defaultItem?: DropdownItem;
+	defaultItem?: DropdownItem<T>;
 	size?: 'sm' | 'md' | 'lg';
 }
 
-export default function Dropdown({
+// Generic function component
+export default function Dropdown<T extends string | number = string | number>({
 	items,
 	value,
 	onChange,
@@ -45,7 +48,7 @@ export default function Dropdown({
 	hideIconOnMobile = false,
 	defaultItem,
 	size = 'md',
-}: DropdownProps) {
+}: DropdownProps<T>) {
 	const [isOpen, setIsOpen] = useState(false);
 	const { setDropdownOpen } = useDropdownState();
 	const [searchQuery, setSearchQuery] = useState('');
@@ -54,16 +57,13 @@ export default function Dropdown({
 	const searchInputRef = useRef<HTMLInputElement>(null);
 
 	useEffect(() => {
-		// Thông báo context khi dropdown mở/đóng
 		setDropdownOpen(isOpen);
-
-		// Cleanup khi unmount
 		return () => setDropdownOpen(false);
 	}, [isOpen, setDropdownOpen]);
 
 	const allItems = defaultItem ? [defaultItem, ...items] : items;
 
-	// Tìm item dựa trên value (so sánh với id hoặc value của item)
+	// Tìm item với type-safe comparison
 	const currentItem = allItems.find(
 		(item) =>
 			String(item.id) === String(value) ||
@@ -80,11 +80,10 @@ export default function Dropdown({
 		  )
 		: allItems;
 
-	// Size configurations
 	const sizeClasses = {
-		sm: 'h-9', // 36px
-		md: 'h-11', // 44px
-		lg: 'h-14', // 56px
+		sm: 'h-9',
+		md: 'h-11',
+		lg: 'h-14',
 	};
 
 	useEffect(() => {
@@ -126,12 +125,13 @@ export default function Dropdown({
 		};
 	}, [isOpen, isMobile]);
 
-	const handleSelect = (item: DropdownItem) => {
+	const handleSelect = (item: DropdownItem<T>) => {
 		if (defaultItem && item.id === defaultItem.id) {
-			onChange('');
+			// Cast empty string to T type
+			onChange('' as T);
 		} else {
-			// Ưu tiên trả về value, nếu không có thì trả về id
-			onChange(item.value !== undefined ? item.value : item.id);
+			// Ưu tiên value, nếu không có thì dùng id
+			onChange((item.value !== undefined ? item.value : item.id) as T);
 		}
 		setIsOpen(false);
 		setSearchQuery('');
@@ -157,7 +157,6 @@ export default function Dropdown({
 
 	const currentVariant = variantStyles[variant];
 
-	// Animation variants
 	const desktopMenuVariants: Variants = {
 		hidden: {
 			opacity: 0,
@@ -377,7 +376,7 @@ export default function Dropdown({
 												(defaultItem &&
 													item.id ===
 														defaultItem.id &&
-													value === '') ||
+													value === ('' as T)) ||
 												String(item.id) ===
 													String(value) ||
 												String(item.value) ===
@@ -502,7 +501,7 @@ export default function Dropdown({
 							</motion.div>
 						)}
 
-						{/* Mobile Bottom Sheet */}
+						{/* Mobile Bottom Sheet - tương tự logic trên */}
 						{isMobile && (
 							<motion.div
 								variants={mobileSheetVariants}
@@ -579,7 +578,7 @@ export default function Dropdown({
 												(defaultItem &&
 													item.id ===
 														defaultItem.id &&
-													value === '') ||
+													value === ('' as T)) ||
 												String(item.id) ===
 													String(value) ||
 												String(item.value) ===
@@ -731,7 +730,6 @@ export default function Dropdown({
 					background: rgb(110, 231, 183);
 				}
 
-				/* Mobile scrollbar - thinner and more subtle */
 				.mobile-scrollbar::-webkit-scrollbar {
 					width: 4px;
 				}
@@ -745,7 +743,6 @@ export default function Dropdown({
 					border-radius: 10px;
 				}
 
-				/* Safe area for iOS */
 				.h-safe-bottom {
 					height: env(safe-area-inset-bottom);
 					min-height: 20px;
