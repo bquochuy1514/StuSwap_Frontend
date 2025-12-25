@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
 		domains: [
 			'localhost',
 			'lh3.googleusercontent.com',
-			'click-techno-intended-preston.trycloudflare.com',
+			'studentswap-api.onrender.com',
 		], // Add 'localhost' to the allowed domains
 	},
 };
