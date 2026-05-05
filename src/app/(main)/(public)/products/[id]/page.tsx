@@ -19,7 +19,6 @@ import {
 import { IoSparkles, IoSchool } from 'react-icons/io5';
 import api from '@/lib/api/axiosInstance';
 import CompactButton from '@/components/ui/CompactButton';
-import Image from 'next/image';
 import { Product } from '@/types/product';
 
 const conditionLabels: Record<string, string> = {
@@ -201,13 +200,12 @@ export default function ProductDetailPage() {
 										Nổi bật
 									</div>
 								)}
-								<Image
+								<img
 									src={
 										images[selectedImage] ||
 										'/placeholder.jpg'
 									}
 									alt={product.title}
-									fill
 									className="object-contain p-4"
 								/>
 							</div>
@@ -227,12 +225,11 @@ export default function ProductDetailPage() {
 													: 'border-gray-200 hover:border-gray-400'
 											}`}
 										>
-											<Image
+											<img
 												src={img}
 												alt={`${product.title} ${
 													idx + 1
 												}`}
-												fill
 												className="object-cover"
 											/>
 										</button>
@@ -327,13 +324,12 @@ export default function ProductDetailPage() {
 								</h3>
 								<div className="flex items-start gap-3 mb-4">
 									<div className="relative w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
-										<Image
+										<img
 											src={
 												product.user.avatar ||
 												'/avatar-placeholder.jpg'
 											}
 											alt={product.user.fullName}
-											fill
 											className="object-cover"
 										/>
 									</div>

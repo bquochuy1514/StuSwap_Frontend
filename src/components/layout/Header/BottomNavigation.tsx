@@ -8,7 +8,6 @@ import { MdOutlinePostAdd, MdPerson, MdPostAdd } from 'react-icons/md';
 import { BiCart, BiSolidCart } from 'react-icons/bi';
 import { FiUser, FiUserCheck } from 'react-icons/fi';
 import { HiOutlineDocumentText, HiDocumentText } from 'react-icons/hi';
-import Image from 'next/image';
 import GradientButton from '@/components/ui/GradientButton';
 import { useState } from 'react';
 import { useDropdownState } from '@/contexts/DropdownContext';
@@ -97,7 +96,7 @@ export default function BottomNavigation() {
 				<nav
 					className={cn(
 						'fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-200 shadow-2xl lg:hidden transition-transform duration-200',
-						isAnyDropdownOpen && 'translate-y-96'
+						isAnyDropdownOpen && 'translate-y-96',
 						// Trượt xuống dưới khi dropdown mở
 					)}
 				>
@@ -155,7 +154,7 @@ export default function BottomNavigation() {
 																: 'border-gray-300'
 														}`}
 													>
-														<Image
+														<img
 															src={
 																user.avatar ||
 																`${process.env.NEXT_PUBLIC_API_URL}/images/users/default_avatar.jpg`

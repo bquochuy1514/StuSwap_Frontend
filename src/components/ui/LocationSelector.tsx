@@ -15,27 +15,26 @@ interface LocationSelectorProps {
 }
 
 interface Province {
-	province_id: string;
-	province_name: string;
-	province_type: string;
+	code: number;
+	name: string;
 }
 
 interface District {
-	district_id: string;
-	district_name: string;
-	district_type: string;
-	province_id: string;
+	code: number;
+	name: string;
 }
 
 interface Ward {
-	ward_id: string;
-	ward_name: string;
-	ward_type: string;
-	district_id: string;
+	code: number;
+	name: string;
 }
 
-interface ApiResponse<T> {
-	results: T[];
+interface ProvinceWithDistricts extends Province {
+	districts: (District & { wards?: Ward[] })[];
+}
+
+interface DistrictWithWards extends District {
+	wards: Ward[];
 }
 
 export default function LocationSelector({
@@ -49,7 +48,13 @@ export default function LocationSelector({
 	const [wards, setWards] = useState<Ward[]>([]);
 
 	const [selectedProvince, setSelectedProvince] = useState('');
+	const [selectedProvinceCode, setSelectedProvinceCode] = useState<
+		number | null
+	>(null);
 	const [selectedDistrict, setSelectedDistrict] = useState('');
+	const [selectedDistrictCode, setSelectedDistrictCode] = useState<
+		number | null
+	>(null);
 	const [selectedWard, setSelectedWard] = useState('');
 	const [specificAddress, setSpecificAddress] = useState('');
 
@@ -59,89 +64,80 @@ export default function LocationSelector({
 	const lastEmittedDataRef = useRef<string | null>(null);
 	const initializationCompleteRef = useRef(false);
 
-	// Cache để tránh fetch lại
 	const provincesCache = useRef<Province[] | null>(null);
-	const districtsCache = useRef<Record<string, District[]>>({});
-	const wardsCache = useRef<Record<string, Ward[]>>({});
+	const districtsCache = useRef<Record<number, District[]>>({});
+	const wardsCache = useRef<Record<number, Ward[]>>({});
 
-	// Fetch provinces on mount
-	useEffect(() => {
-		fetchProvinces();
-	}, []);
+	const BASE_URL = 'https://provinces.open-api.vn/api';
 
 	const fetchProvinces = async () => {
 		if (provincesCache.current) {
 			setProvinces(provincesCache.current);
 			return;
 		}
-
 		try {
 			setLoading(true);
-			const response = await fetch(
-				'https://api.vnappmob.com/api/v2/province/'
-			);
-			const data: ApiResponse<Province> = await response.json();
-			provincesCache.current = data.results;
-			setProvinces(data.results);
-		} catch (error) {
-			console.error('❌ Error fetching provinces:', error);
+			const res = await fetch(`${BASE_URL}/p/`);
+			const data: Province[] = await res.json();
+			provincesCache.current = data;
+			setProvinces(data);
+		} catch (err) {
+			console.error('Error fetching provinces:', err);
 		} finally {
 			setLoading(false);
 		}
 	};
 
-	const fetchDistricts = async (provinceId: string) => {
-		if (districtsCache.current[provinceId]) {
-			return districtsCache.current[provinceId];
+	const fetchDistricts = async (
+		provinceCode: number,
+	): Promise<District[]> => {
+		if (districtsCache.current[provinceCode]) {
+			return districtsCache.current[provinceCode];
 		}
-
 		try {
-			const response = await fetch(
-				`https://api.vnappmob.com/api/v2/province/district/${provinceId}`
-			);
-			const data: ApiResponse<District> = await response.json();
-			const districtsList: District[] = data.results || [];
-			districtsCache.current[provinceId] = districtsList;
-			return districtsList;
-		} catch (error) {
-			console.error('❌ Error fetching districts:', error);
+			const res = await fetch(`${BASE_URL}/p/${provinceCode}?depth=2`);
+			const data: ProvinceWithDistricts = await res.json();
+			const list = data.districts ?? [];
+			districtsCache.current[provinceCode] = list;
+			return list;
+		} catch (err) {
+			console.error('Error fetching districts:', err);
 			return [];
 		}
 	};
 
-	const fetchWards = async (districtId: string) => {
-		if (wardsCache.current[districtId]) {
-			return wardsCache.current[districtId];
+	const fetchWards = async (districtCode: number): Promise<Ward[]> => {
+		if (wardsCache.current[districtCode]) {
+			return wardsCache.current[districtCode];
 		}
-
 		try {
-			const response = await fetch(
-				`https://api.vnappmob.com/api/v2/province/ward/${districtId}`
-			);
-			const data: ApiResponse<Ward> = await response.json();
-			const wardsList: Ward[] = data.results || [];
-			wardsCache.current[districtId] = wardsList;
-			return wardsList;
-		} catch (error) {
-			console.error('❌ Error fetching wards:', error);
+			const res = await fetch(`${BASE_URL}/d/${districtCode}?depth=2`);
+			const data: DistrictWithWards = await res.json();
+			const list = data.wards ?? [];
+			wardsCache.current[districtCode] = list;
+			return list;
+		} catch (err) {
+			console.error('Error fetching wards:', err);
 			return [];
 		}
 	};
 
-	// Initialize from addressData
 	useEffect(() => {
-		const initializeAddress = async () => {
+		fetchProvinces();
+	}, []);
+
+	// Initialize từ addressData
+	useEffect(() => {
+		const init = async () => {
 			if (
 				!addressData ||
 				provinces.length === 0 ||
 				initializationCompleteRef.current ||
 				isInitializing
-			) {
+			)
 				return;
-			}
 
 			setIsInitializing(true);
-
 			try {
 				const {
 					specificAddress: addr,
@@ -150,46 +146,40 @@ export default function LocationSelector({
 					province,
 				} = addressData;
 
-				if (addr) {
-					setSpecificAddress(addr);
-				}
+				if (addr) setSpecificAddress(addr);
 
 				if (province) {
 					const foundProvince = provinces.find(
-						(p) => p.province_name === province
+						(p) => p.name === province,
 					);
-
 					if (foundProvince) {
-						setSelectedProvince(foundProvince.province_name);
+						setSelectedProvince(foundProvince.name);
+						setSelectedProvinceCode(foundProvince.code);
 
 						if (district) {
 							const districtsList = await fetchDistricts(
-								foundProvince.province_id
+								foundProvince.code,
 							);
 							setDistricts(districtsList);
 
 							const foundDistrict = districtsList.find(
-								(d) => d.district_name === district
+								(d) => d.name === district,
 							);
-
 							if (foundDistrict) {
-								setSelectedDistrict(
-									foundDistrict.district_name
-								);
+								setSelectedDistrict(foundDistrict.name);
+								setSelectedDistrictCode(foundDistrict.code);
 
 								if (ward) {
 									const wardsList = await fetchWards(
-										foundDistrict.district_id
+										foundDistrict.code,
 									);
 									setWards(wardsList);
 
 									const foundWard = wardsList.find(
-										(w) => w.ward_name === ward
+										(w) => w.name === ward,
 									);
-
-									if (foundWard) {
-										setSelectedWard(foundWard.ward_name);
-									}
+									if (foundWard)
+										setSelectedWard(foundWard.name);
 								}
 							}
 						}
@@ -197,77 +187,63 @@ export default function LocationSelector({
 				}
 
 				initializationCompleteRef.current = true;
-			} catch (error) {
-				console.error('❌ Error initializing address:', error);
+			} catch (err) {
+				console.error('Error initializing address:', err);
 			} finally {
 				setIsInitializing(false);
 			}
 		};
 
-		initializeAddress();
+		init();
 	}, [addressData, provinces, isInitializing]);
 
-	// Handle province change
 	const handleProvinceChange = async (value: string | number) => {
 		const provinceName = String(value);
 		setSelectedProvince(provinceName);
+		setSelectedProvinceCode(null);
 		setSelectedDistrict('');
+		setSelectedDistrictCode(null);
 		setSelectedWard('');
+		setDistricts([]);
 		setWards([]);
 
-		if (provinceName) {
-			const province = provinces.find(
-				(p) => p.province_name === provinceName
-			);
-			if (province) {
-				setLoading(true);
-				const districtsList = await fetchDistricts(
-					province.province_id
-				);
-				setDistricts(districtsList);
-				setLoading(false);
-			}
-		} else {
-			setDistricts([]);
+		const found = provinces.find((p) => p.name === provinceName);
+		if (found) {
+			setSelectedProvinceCode(found.code);
+			setLoading(true);
+			const list = await fetchDistricts(found.code);
+			setDistricts(list);
+			setLoading(false);
 		}
 	};
 
-	// Handle district change
 	const handleDistrictChange = async (value: string | number) => {
 		const districtName = String(value);
 		setSelectedDistrict(districtName);
+		setSelectedDistrictCode(null);
 		setSelectedWard('');
+		setWards([]);
 
-		if (districtName) {
-			const district = districts.find(
-				(d) => d.district_name === districtName
-			);
-			if (district) {
-				setLoading(true);
-				const wardsList = await fetchWards(district.district_id);
-				setWards(wardsList);
-				setLoading(false);
-			}
-		} else {
-			setWards([]);
+		const found = districts.find((d) => d.name === districtName);
+		if (found) {
+			setSelectedDistrictCode(found.code);
+			setLoading(true);
+			const list = await fetchWards(found.code);
+			setWards(list);
+			setLoading(false);
 		}
 	};
 
-	// Handle ward change
 	const handleWardChange = (value: string | number) => {
-		const wardName = String(value);
-		setSelectedWard(wardName);
+		setSelectedWard(String(value));
 	};
 
-	// Build display string
 	const buildDisplayString = useCallback(() => {
 		const parts: string[] = [];
-
 		if (specificAddress.trim()) parts.push(specificAddress.trim());
 		if (selectedWard) parts.push(selectedWard);
 		if (selectedDistrict) parts.push(selectedDistrict);
 		if (selectedProvince) parts.push(selectedProvince);
-
 		return parts.join(', ');
 	}, [specificAddress, selectedWard, selectedDistrict, selectedProvince]);
 
@@ -276,17 +252,16 @@ export default function LocationSelector({
 		if (!initializationCompleteRef.current) return;
 
 		const timeoutId = setTimeout(() => {
-			const newAddressData: AddressData = {
+			const newData: AddressData = {
 				specificAddress: specificAddress.trim(),
 				ward: selectedWard || '',
 				district: selectedDistrict || '',
 				province: selectedProvince || '',
 			};
-
-			const dataString = JSON.stringify(newAddressData);
+			const dataString = JSON.stringify(newData);
 			if (dataString !== lastEmittedDataRef.current) {
 				lastEmittedDataRef.current = dataString;
-				onChange?.(newAddressData);
+				onChange?.(newData);
 			}
 		}, 300);
 
@@ -315,23 +290,22 @@ export default function LocationSelector({
 		);
 	}
 
-	// Convert to Dropdown items format
 	const provinceItems = provinces.map((p) => ({
-		id: p.province_id,
-		label: p.province_name,
-		value: p.province_name, // Sử dụng name làm value để dễ so sánh
+		id: String(p.code),
+		label: p.name,
+		value: p.name,
 	}));
 
 	const districtItems = districts.map((d) => ({
-		id: d.district_id,
-		label: d.district_name,
-		value: d.district_name,
+		id: String(d.code),
+		label: d.name,
+		value: d.name,
 	}));
 
 	const wardItems = wards.map((w) => ({
-		id: w.ward_id,
-		label: w.ward_name,
-		value: w.ward_name,
+		id: String(w.code),
+		label: w.name,
+		value: w.name,
 	}));
 
 	return (
@@ -362,7 +336,6 @@ export default function LocationSelector({
 					searchable
 					size="md"
 				/>
-
 				<Dropdown
 					items={districtItems}
 					value={selectedDistrict}
@@ -377,7 +350,6 @@ export default function LocationSelector({
 					searchable
 					size="md"
 				/>
-
 				<Dropdown
 					items={wardItems}
 					value={selectedWard}

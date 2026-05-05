@@ -10,7 +10,6 @@ import { FaUserCircle } from 'react-icons/fa';
 import Logo from '@/components/ui/Logo';
 import CompactButton from '@/components/ui/CompactButton';
 import SearchBar from './SearchBar';
-import Image from 'next/image';
 import UserDropdownMenu from './UserDropDownMenu';
 
 export default function Header() {
@@ -110,7 +109,7 @@ export default function Header() {
 											className="relative w-10 h-10 rounded-full border-2 border-gray-600 overflow-hidden hover:scale-110 hover:border-emerald-500 transition-all duration-200 shadow-lg hover:shadow-xl"
 										>
 											{user?.avatar ? (
-												<Image
+												<img
 													src={
 														user.avatar ||
 														`${process.env.NEXT_PUBLIC_API_URL}/images/users/default_avatar.jpg`
@@ -245,7 +244,7 @@ export default function Header() {
 							<div className="flex items-center gap-3 p-3 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-lg">
 								<div className="relative w-12 h-12 rounded-full border-2 border-white overflow-hidden flex-shrink-0">
 									{user?.avatar ? (
-										<Image
+										<img
 											src={
 												user.avatar ||
 												`${process.env.NEXT_PUBLIC_API_URL}/images/users/default_avatar.jpg`

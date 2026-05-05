@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import Link from 'next/link';
 
 export default function Logo({
@@ -13,7 +12,7 @@ export default function Logo({
 			className="flex-shrink-0 hover:opacity-80 transition-opacity"
 		>
 			<div className="flex items-center justify-center h-full w-full">
-				<Image
+				<img
 					src={
 						theme === 'light'
 							? '/student_swap_logo.png'
@@ -22,14 +21,13 @@ export default function Logo({
 					alt="Student Swap Logo"
 					width={width}
 					height={height}
-					priority
 					className="cursor-pointer"
 				/>
 			</div>
 		</Link>
 	) : (
 		<div className="flex items-center justify-center h-full w-full">
-			<Image
+			<img
 				src={
 					theme === 'light'
 						? '/student_swap_logo.png'
@@ -38,7 +36,6 @@ export default function Logo({
 				alt="Student Swap Logo"
 				width={width}
 				height={height}
-				priority
 			/>
 		</div>
 	);

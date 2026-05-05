@@ -6,10 +6,29 @@ const nextConfig: NextConfig = {
 		ignoreDuringBuilds: true,
 	},
 	images: {
-		domains: [
-			'localhost',
-			'lh3.googleusercontent.com',
-			'studentswap-api.onrender.com',
+		remotePatterns: [
+			{
+				protocol: 'http',
+				hostname: 'localhost',
+				port: '8080',
+				pathname: '/**',
+			},
+			{
+				protocol: 'http',
+				hostname: 'studentswap-backend', // tên service trong docker-compose
+				port: '8080',
+				pathname: '/**',
+			},
+			{
+				protocol: 'https',
+				hostname: 'lh3.googleusercontent.com',
+				pathname: '/**',
+			},
+			{
+				protocol: 'https',
+				hostname: 'studentswap-api.onrender.com',
+				pathname: '/**',
+			},
 		],
 	},
 };

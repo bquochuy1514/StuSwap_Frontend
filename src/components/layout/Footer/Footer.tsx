@@ -2,12 +2,9 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import {
 	FaFacebookF,
-	FaTwitter,
 	FaInstagram,
-	FaYoutube,
 	FaLinkedinIn,
 	FaGithub,
 } from 'react-icons/fa';

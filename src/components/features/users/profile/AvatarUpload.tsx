@@ -4,7 +4,6 @@ import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiCamera, FiX, FiUpload, FiEye, FiZoomIn } from 'react-icons/fi';
 import { toast } from '@/components/ui/Toast';
-import Image from 'next/image';
 import { uploadAvatar } from '@/lib/api/userApi';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -29,7 +28,7 @@ export default function AvatarUpload({
 	const currentAvatar = user?.avatar;
 
 	const handleFileSelect = async (
-		event: React.ChangeEvent<HTMLInputElement>
+		event: React.ChangeEvent<HTMLInputElement>,
 	) => {
 		const file = event.target.files?.[0];
 		if (!file) return;
@@ -150,13 +149,10 @@ export default function AvatarUpload({
 				>
 					{displayAvatar ? (
 						<div className="relative w-full h-full">
-							<Image
+							<img
 								src={displayAvatar}
 								alt={userName}
-								fill
-								className="object-cover transition-all duration-300 group-hover:brightness-110"
-								sizes="128px"
-								priority
+								className="object-cover w-full h-full transition-all duration-300 group-hover:brightness-110"
 							/>
 							{/* Hover Overlay */}
 							<div className="absolute inset-0 bg-gradient-to-b from-black/0 via-black/0 to-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -291,13 +287,12 @@ export default function AvatarUpload({
 								className="relative max-w-3xl max-h-[85vh] w-full"
 							>
 								<div className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl">
-									<Image
+									<img
 										src={displayAvatar}
 										alt={userName}
 										width={800}
 										height={800}
 										className="object-contain w-full h-full max-h-[85vh]"
-										priority
 									/>
 								</div>
 
