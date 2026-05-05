@@ -50,12 +50,12 @@ export default function NotFound() {
 				>
 					🏠 Về trang chủ
 				</Link>
-				<a
+				<Link
 					href="/products"
 					className="px-6 py-3 bg-white text-emerald-600 font-semibold rounded-xl border-2 border-emerald-600 hover:bg-emerald-50 transition-all duration-300 shadow-md hover:shadow-lg hover:scale-105 active:scale-95"
 				>
 					🛍️ Khám phá đồ cũ khác
-				</a>
+				</Link>
 			</div>
 
 			{/* Decoration elements */}
