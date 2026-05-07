@@ -20,6 +20,7 @@ import { IoSparkles, IoSchool } from 'react-icons/io5';
 import api from '@/lib/api/axiosInstance';
 import CompactButton from '@/components/ui/CompactButton';
 import { Product } from '@/types/product';
+import Image from 'next/image';
 
 const conditionLabels: Record<string, string> = {
 	new: 'Mới 100%',
@@ -142,15 +143,15 @@ export default function ProductDetailPage() {
 		<div className="min-h-screen bg-gray-50">
 			<div className="max-w-7xl mx-auto px-4 py-6">
 				{/* Back Button */}
-				<motion.button
+				{/* <motion.button
 					initial={{ opacity: 0, x: -20 }}
 					animate={{ opacity: 1, x: 0 }}
 					onClick={() => router.back()}
-					className="flex items-center gap-2 text-gray-600 hover:text-emerald-600 mb-6"
+					className="flex items-center cursor-pointer gap-2 text-gray-600 hover:text-emerald-600 mb-6"
 				>
 					<MdArrowBack className="w-5 h-5" />
 					<span>Quay lại</span>
-				</motion.button>
+				</motion.button> */}
 
 				{/* Breadcrumb */}
 				<motion.div
@@ -200,13 +201,15 @@ export default function ProductDetailPage() {
 										Nổi bật
 									</div>
 								)}
-								<img
+								<Image
 									src={
 										images[selectedImage] ||
 										'/placeholder.jpg'
 									}
 									alt={product.title}
 									className="object-contain p-4"
+									fill
+									priority
 								/>
 							</div>
 
@@ -225,12 +228,14 @@ export default function ProductDetailPage() {
 													: 'border-gray-200 hover:border-gray-400'
 											}`}
 										>
-											<img
+											<Image
 												src={img}
 												alt={`${product.title} ${
 													idx + 1
 												}`}
-												className="object-cover"
+												className="object-cover cursor-pointer"
+												fill
+												sizes="80px"
 											/>
 										</button>
 									))}
@@ -324,13 +329,15 @@ export default function ProductDetailPage() {
 								</h3>
 								<div className="flex items-start gap-3 mb-4">
 									<div className="relative w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
-										<img
+										<Image
 											src={
 												product.user.avatar ||
 												'/avatar-placeholder.jpg'
 											}
 											alt={product.user.fullName}
 											className="object-cover"
+											sizes="48px"
+											fill
 										/>
 									</div>
 									<div className="flex-1">
