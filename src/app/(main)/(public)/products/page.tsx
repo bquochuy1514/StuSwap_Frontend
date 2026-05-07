@@ -30,8 +30,8 @@ interface Category {
 }
 
 interface Province {
-	province_id: string;
-	province_name: string;
+	code: number;
+	name: string;
 }
 
 export default function ProductsPage() {
@@ -132,7 +132,7 @@ export default function ProductsPage() {
 						id: category.id,
 						label: category.name,
 						value: category.id,
-					})
+					}),
 				);
 				setCategoryItems(transformedData);
 			} catch (error) {
@@ -146,15 +146,15 @@ export default function ProductsPage() {
 		const fetchProvinces = async () => {
 			try {
 				const response = await fetch(
-					'https://api.vnappmob.com/api/v2/province/'
+					'https://provinces.open-api.vn/api/p/',
 				);
 				const data = await response.json();
-				const transformed: DropdownItem[] = data.results.map(
+				const transformed: DropdownItem[] = data.map(
 					(prov: Province) => ({
-						id: prov.province_id,
-						label: prov.province_name,
-						value: prov.province_name,
-					})
+						id: String(prov.code),
+						label: prov.name,
+						value: prov.name,
+					}),
 				);
 				setLocationItems(transformed);
 			} catch (error) {
@@ -192,7 +192,7 @@ export default function ProductsPage() {
 
 			const response = await api.get<ProductsResponse>(
 				'/api/products/search',
-				{ params }
+				{ params },
 			);
 			setProducts(response.data.data);
 			setMeta(response.data.meta);
@@ -258,7 +258,7 @@ export default function ProductsPage() {
 		setLikedProducts((prev) =>
 			prev.includes(id)
 				? prev.filter((productId) => productId !== id)
-				: [...prev, id]
+				: [...prev, id],
 		);
 	};
 
@@ -303,7 +303,7 @@ export default function ProductsPage() {
 
 	const handleRemoveCondition = (cond: string) => {
 		const newConditions = appliedFilters.selectedConditions.filter(
-			(c) => c !== cond
+			(c) => c !== cond,
 		);
 		setSelectedConditions(newConditions);
 		setAppliedFilters((prev) => ({

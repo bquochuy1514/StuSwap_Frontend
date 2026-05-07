@@ -14,9 +14,8 @@ import { Category } from '@/types/category';
 import { useAuth } from '@/contexts/AuthContext';
 
 interface Province {
-	province_id: string;
-	province_name: string;
-	province_type: string;
+	code: number;
+	name: string;
 }
 
 export default function SearchBar({ className }: { className?: string }) {
@@ -43,7 +42,7 @@ export default function SearchBar({ className }: { className?: string }) {
 						id: category.id,
 						label: category.name,
 						value: category.id, // Dùng ID để search
-					})
+					}),
 				);
 
 				setCategoryItems(transformedData);
@@ -62,17 +61,17 @@ export default function SearchBar({ className }: { className?: string }) {
 		const fetchLocations = async () => {
 			try {
 				const response = await fetch(
-					'https://api.vnappmob.com/api/v2/province/'
+					'https://provinces.open-api.vn/api/p/',
 				);
 				const data = await response.json();
 
 				// Transform locations - dùng province_name đầy đủ
-				const transformed: DropdownItem[] = data.results.map(
+				const transformed: DropdownItem[] = data.map(
 					(prov: Province) => ({
-						id: prov.province_id,
-						label: prov.province_name, // "Thành phố Hồ Chí Minh"
-						value: prov.province_name, // ✅ Dùng tên đầy đủ để match với DB
-					})
+						id: String(prov.code),
+						label: prov.name,
+						value: prov.name,
+					}),
 				);
 
 				setLocationItems(transformed);
@@ -91,7 +90,7 @@ export default function SearchBar({ className }: { className?: string }) {
 		if (user?.address?.province && locationItems.length > 0) {
 			// Tìm location item khớp với province của user
 			const userProvinceItem = locationItems.find(
-				(item) => item.value === user.address.province
+				(item) => item.value === user.address.province,
 			);
 
 			if (userProvinceItem) {
@@ -141,7 +140,7 @@ export default function SearchBar({ className }: { className?: string }) {
 		<div
 			className={cn(
 				'relative bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300',
-				className
+				className,
 			)}
 		>
 			{/* Desktop Layout - Single Row */}
